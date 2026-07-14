@@ -1,0 +1,148 @@
+import os
+
+from aiogram import Bot, F, Router
+from aiogram.filters import Command
+from aiogram.types import Message
+from aiogram.fsm.state import StatesGroup, State
+from aiogram.fsm.context import FSMContext
+
+from app import keyboards as kb
+from app import database as db
+from config import id_klient
+
+router = Router()
+
+
+class Reg(StatesGroup):
+    text_1 = State()
+    text_2 = State()
+    img = State()
+    delete_account = State()
+    add_surname = State()
+    add_account = State()
+
+
+@router.message(Command("admin"))
+async def cmd_admin(message: Message):
+    if await db.db_check(message.from_user.id, "Admin"):
+        await message.answer("Привет Администратор", reply_markup=kb.kb_admin)
+
+
+@router.message(F.text == "Объявление")
+async def cmd_admin_ad(message: Message, state: FSMContext):
+    await state.set_state(Reg.text_1)
+    await message.answer("Пишите объявление")
+
+
+@router.message(Reg.text_1, F.text != '✖ Отмена')
+async def reg_admin_text_1(message: Message, bot: Bot, state: FSMContext):
+    if await db.db_check(message.from_user.id, "Admin"):
+        for id, name, surname in await db.db_select():
+            await bot.send_message(int(id), f"Привет {name}\n{message.text}\nАдминистрация!!!")
+    await state.clear()
+
+
+@router.message(F.text == "Аккаунты")
+async def cmd_admin_ak(message: Message):
+    if await db.db_check(message.from_user.id, "Admin"):
+        info = ''
+        for id, name, surname in await db.db_select():
+            info += f"{id}: {name}, {surname}\n"
+        await message.answer(info)
+
+
+class PhotoForm(StatesGroup):
+    waiting_for_photo = State()  # Шаг 1: Ожидание фото
+    waiting_for_caption = State()  # Шаг 2: Ожидание подписи
+
+
+# Старт процесса
+@router.message(F.text == "Картинка")
+async def start_photo_upload(message: Message, state: FSMContext):
+    if await db.db_check(message.from_user.id, "Admin"):
+        await message.answer("📷 Отправьте фото, к которому нужно добавить подпись")
+        await state.set_state(PhotoForm.waiting_for_photo)
+
+
+# Обработка фото
+@router.message(PhotoForm.waiting_for_photo, F.photo)
+async def process_photo(message: Message, state: FSMContext):
+    # Сохраняем фото
+    photo = message.photo[-1]
+    await state.update_data(photo_id=photo.file_id)
+    # Переходим к ожиданию подписи
+    await state.set_state(PhotoForm.waiting_for_caption)
+    await message.answer("✅ Фото принято! Теперь введите подпись к фото")
+
+
+# Обработка подписи
+@router.message(PhotoForm.waiting_for_caption, F.text)
+async def process_caption(message: Message, state: FSMContext, bot: Bot):
+    await state.update_data(caption=message.text)
+    full_data = await state.get_data()
+    for tg_id, name, data in await db.db_select_users():
+        await bot.send_photo(int(tg_id), full_data['photo_id'],
+                             caption=f"Привет {name}!\n{full_data['caption']}\nАдминистрация!!!")
+    await state.clear()
+
+
+@router.message(F.text == "Удалить")
+async def cmd_admin_del(message: Message, state: FSMContext):
+    await state.set_state(Reg.delete_account)
+    await message.answer("Пишите ID аккаунта")
+
+
+@router.message(Reg.delete_account, F.text != '✖ Отмена')
+async def reg_admin_del_account(message: Message, bot: Bot, state: FSMContext):
+    if await db.db_check(message.from_user.id, "Admin"):
+        await db.db_delete(message.text)
+        await bot.send_message(message.from_user.id, "Аккаунт удален")
+    await state.clear()
+
+
+@router.message(F.text == "Добавить")
+async def cmd_admin_add(message: Message, state: FSMContext):
+    await state.set_state(Reg.add_account)
+    await message.answer("Пишите ID аккаунта\nИ через пробел фамилию")
+
+
+@router.message(Reg.add_account, F.text != '✖ Отмена')
+async def reg_admin_add_account(message: Message, bot: Bot, state: FSMContext):
+    if await db.db_check(message.from_user.id, "Admin"):
+        id_name, name = message.text.split(" ", 1)
+        await db.cmd_start_db(id_name, name)
+        await bot.send_message(message.from_user.id, "Аккаунт добавлен")
+    await state.clear()
+
+
+@router.message(F.text == "Обновить")
+async def cmd_admin_add(message: Message, state: FSMContext):
+    await state.set_state(Reg.add_surname)
+    await message.answer("Пишите ID аккаунта\nИ через пробел фамилию")
+
+
+@router.message(Reg.add_surname, F.text != '✖ Отмена')
+async def reg_admin_del_surname(message: Message, bot: Bot, state: FSMContext):
+    if await db.db_check(message.from_user.id, "Admin"):
+        id_name, surname = message.text.split(" ", 1)
+        await db.db_update(id_name, surname)
+        await bot.send_message(message.from_user.id, "Аккаунт обновлен")
+    await state.clear()
+
+
+@router.message(F.text == "✖ Отмена")
+async def cmd_admin_del(message: Message, state: FSMContext):
+    await state.clear()
+    await message.answer("Действие отменено")
+
+
+@router.message(F.text == "🔙 Назад")
+async def cmd_admin_del(message: Message, state: FSMContext):
+    await state.clear()
+    await message.answer("Это Бимгор бот", reply_markup=kb.kb_bot)
+
+
+@router.message(F.text == "🔄 Рестарт")
+async def cmd_restart_bot(message: Message, state: FSMContext):
+    await state.clear()
+    await message.answer("Рестарт через 3 сек", os.startfile("bot_run.vbs"))

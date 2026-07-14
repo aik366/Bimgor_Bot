@@ -1,0 +1,11 @@
+<105 \Konturfraesen\
+EA="1:0"
+MDA="SEI"
+RK="WRKR"
+EE="1:8"
+MDE="SEI_AB"
+TNO="144"
+??="1"
+F_="8"
+ZA="t-3.5"
+AB="1.5"

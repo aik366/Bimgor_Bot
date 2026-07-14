@@ -1,0 +1,9 @@
+  @ LINE_EP, 0 : f1x+d, lpy-fy+d, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : f1x+d, lpy-fy+d-2/3*d, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : f1x+d-d/3, lpy-fy+d-2/3*d, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : f1x+d-d/3, lpy-fy+d-2/3*d+d/3, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : f1x+d-d/3-d/3, lpy-fy+d-2/3*d+d/3, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : f1x+d-d/3-d/3, lpy-fy+d-2/3*d+d/3-2/3*d, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : f1x+d-d/3-d/3+d, lpy-fy+d-2/3*d+d/3-2/3*d, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : f1x+d-d/3-d/3+d, lpy-fy+d-2/3*d+d/3-2/3*d+d, 0, 0, 0, 0, 0, 0, 0
+'TTTT1

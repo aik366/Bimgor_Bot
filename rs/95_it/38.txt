@@ -1,0 +1,5 @@
+  @ LINE_EP, 0 : lpx-RAMY-27, j1, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-27, j1+6, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RUM1, j1+6, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RYM1, j1+RAM, 0, 0, 0, 0, 0, 0, 0
+' TTTTT

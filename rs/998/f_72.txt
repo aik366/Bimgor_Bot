@@ -1,0 +1,14 @@
+]VEKTOR
+72_txt
+
+<105 \Konturfraesen\
+EA="VEKTOR:0"
+MDA="SEN"
+RK="NoWRK"
+EE="VEKTOR:konec"
+MDE="SEN_AB"
+TNO="157"
+F_="8"
+ZA="@0"
+
+/NUM

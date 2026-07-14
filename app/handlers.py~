@@ -1,0 +1,632 @@
+from aiogram import Router, Bot, F
+from aiogram.types import (CallbackQuery, FSInputFile, InlineKeyboardButton, InlineKeyboardMarkup, Message)
+from aiogram.filters import CommandStart, Command, Filter
+from aiogram.fsm.state import StatesGroup, State
+from aiogram.fsm.context import FSMContext
+from aiogram.utils.markdown import hunderline, hlink
+
+from app import keyboards as kb
+from app import database as db
+from fas import *
+from config import *
+import shutil, os
+from pochta import gmail
+from price.price_func import *
+
+router = Router()
+
+
+class Reg(StatesGroup):
+    number1 = State()
+    number2 = State()
+    data1 = State()
+    data2 = State()
+    our_order = State()
+    ser_order = State()
+    otchot = State()
+    fasad = State()
+    tolshina = State()
+    plenka = State()
+
+
+month, month_1 = strftime('%y'), str(int(strftime('%y')) - 1)
+year, year_1 = strftime('%Y'), str(int(strftime('%Y')) - 1)
+
+
+class MyFilter(Filter):
+    def __init__(self, my_text: str) -> None:
+        self.my_text = my_text
+
+    async def __call__(self, message: Message) -> bool:
+        s = message.text.replace(",", ".")
+        if len(s) == 5 and s[:2].isdigit() and s[-2:].isdigit() and s[2] == '.' and int(s[:2]) < 32 and int(
+                s[-2:]) < 13:
+            return True
+        return False
+
+
+@router.message(CommandStart())
+async def cmd_start(message: Message, bot: Bot, state: FSMContext):
+    await db.cmd_start_db(message.from_user.id, message.from_user.full_name)
+    if not await db.db_check(message.from_user.id, "Admin"):
+        await bot.send_message(id_klient['bot'], f"{message.from_user.full_name} {message.from_user.id} Start")
+    if await db.db_check(message.from_user.id, "Admin"):
+        await message.answer(f"{message.from_user.full_name} Это Фасад бот", reply_markup=kb.kb_bot)
+    elif await db.db_check(message.from_user.id, "Vova"):
+        await message.answer(f"{message.from_user.full_name} Это Фасад бот", reply_markup=kb.kb_vova)
+    elif await db.db_check(message.from_user.id, "Shef"):
+        await message.answer(f"{message.from_user.full_name} Это Фасад бот", reply_markup=kb.kb_shef)
+    elif await db.db_check(message.from_user.id, "Ser"):
+        await message.answer(f"{message.from_user.full_name} Это Фасад бот", reply_markup=kb.kb_serdyuch)
+    elif await db.db_check(message.from_user.id, "Frezer"):
+        await message.answer(f"{message.from_user.full_name} Это Фасад бот", reply_markup=kb.kb_frezer)
+    elif await db.db_check(message.from_user.id, "None") or await db.db_check(message.from_user.id, "sklad"):
+        await message.answer(f"{message.from_user.full_name} Это Фасад бот", reply_markup=kb.kb_all_user)
+    else:
+        await message.answer(f"{message.from_user.full_name} Это Фасад бот", reply_markup=kb.kb_clent)
+    await state.clear()
+
+    # with open('price/user.json', 'r', encoding='UTF-8') as file:
+    #     js_user = json.loads(file.read())
+    #     if str(message.from_user.id) not in js_user:
+    #         js_user[message.from_user.id] = message.from_user.full_name
+    #         with open("price/user.json", "w", encoding="UTF-8") as file:
+    #             content = json.dumps(js_user, ensure_ascii=False)
+    #             file.write(content)
+
+    # with open('price/user.json', 'r', encoding='UTF-8') as file:
+    #     js_user = json.loads(file.read())
+    #     for k, v in js_user.items():
+    #         await bot.send_message(int(k), f"Привет {v}")
+
+
+@router.message(Command("info"))
+async def cmd_help(message: Message, bot: Bot):
+    if await db.db_check(message.from_user.id, "Admin"):
+        await message.answer('Рисунки на Итальянский станок \n' +
+                             '99, 103, 104, 105, 106, 108\n109, 110, 112, 113, 117, 118\n' +
+                             '******************************\n' +
+                             'Фасады с пониженным\n' +
+                             '96, 97, 98, 100, 103\n107, 108, 110, 113, 117\n' +
+                             '******************************\n' +
+                             'Размеры ХДФ\n' +
+                             '96, 97, 103, 107, 108, 110, 113, 117\n' +
+                             'Фасад -130, ПСЯ и Бутыл. -86\n' +
+                             '98,  Фасад -144, ПСЯ и Бутыл. -86\n' +
+                             '100,  Фасад -45, ПСЯ и Бутыл. -45\n' +
+                             '******************************\n' +
+                             '##717.397.91.15.21.Фасад.19р1\n' +
+                             '$$$2345')
+    else:
+        await bot.send_message(id_klient['bot'], f"{message.from_user.full_name} {message.from_user.id} info")
+        await message.answer(f'тут пока пусто')
+        # await message.answer(Requisites)
+
+
+@router.message(F.text == "📨 Почта")
+async def cmd_mail(message: Message, bot: Bot):
+    if not await db.db_check(message.from_user.id, "Admin"):
+        await bot.send_message(id_klient['bot'], str(message.from_user.id) + " help")
+    await message.answer('Почта отправлено', gmail.gmail_bimgor())
+
+
+@router.message(F.text == f"Обновить {year}")
+async def cmd_program(message: Message, bot: Bot, state: FSMContext):
+    if await db.db_check(message.from_user.id, "Admin"):
+        shutil.copyfile(f'{put}{month}.RSB', 'DATA/22.txt')
+        shutil.copyfile('DATA/22.txt', f'DATA/{month}_shef.txt')
+        shutil.copyfile(put_ras, 'DATA/ras.txt')
+        await message.answer(net_program())
+    elif await db.db_check(message.from_user.id, "Ser"):
+        shutil.copyfile(f'{put}{month}.RSB', 'DATA/22.txt')
+        await bot.send_message(id_klient['bot'], str(message.from_user.full_name) + " Обновить")
+        await message.answer("Обновлено!!!")
+    await state.clear()
+
+
+@router.message(F.text == f"Обновить {year_1}")
+async def cmd_program_2(message: Message, state: FSMContext):
+    if await db.db_check(message.from_user.id, "Admin"):
+        shutil.copyfile(f'{put}{month_1}.RSB', 'DATA/22.txt')
+        await message.answer(net_program())
+    elif await db.db_check(message.from_user.id, "Ser"):
+        shutil.copyfile(f'{put}{month_1}.RSB', 'DATA/22.txt')
+        await message.answer("Обновлено!!!")
+    await state.clear()
+
+
+@router.message(F.text == f"🔄 Обновить")
+async def cmd_program_shef(message: Message, bot: Bot, state: FSMContext):
+    shutil.copyfile(f'{put}{month}.RSB', 'DATA/22.txt')
+    shutil.copyfile('DATA/22.txt', f'DATA/{month}_shef.txt')
+    shutil.copyfile(put_ras, 'DATA/ras.txt')
+    await bot.send_message(id_klient['bot'], f"{message.from_user.full_name} Обновить")
+    await message.answer("Обновлено!!!")
+    await state.clear()
+
+
+@router.message(F.text == "📕 Долги")
+async def cmd_dolgi(message: Message):
+    in_kb = []
+    for key, value in dolgi_user().items():
+        in_kb.append([InlineKeyboardButton(text=f'{key} {value: ,}', callback_data=f'###{key}')])
+    keyboard = InlineKeyboardMarkup(inline_keyboard=in_kb)
+    await message.answer("📕 Долги", reply_markup=keyboard)
+
+
+@router.callback_query(F.data[:3] == "###")
+async def dolgi_value(call: CallbackQuery, bot: Bot):
+    message_text = call.data[3:]
+    call_one, call_two = '', ''
+    total_one, total_two = 0, 0
+    if len(dolgi_user_2(message_text)[0]) > 0:
+        key_one, call_one = dolgi_user_2(message_text)[0], f'{message_text} Готовые\n'
+        total_one = dolgi_user_2(message_text)[2]
+        for i in key_one:
+            call_one += f'№ {i[0]} от {i[1]} - {i[2]: ,} руб.\n'
+        call_one += f'итого: {total_one: ,} руб.\n\n'
+    if len(dolgi_user_2(message_text)[1]) > 0:
+        key_two, call_two = dolgi_user_2(message_text)[1], f'{message_text} еще в работе\n'
+        total_two = dolgi_user_2(message_text)[3]
+        for j in key_two:
+            call_two += f'№ {j[0]} от {j[1]} - {j[2]: ,} руб.\n'
+        call_two += f'итого: {total_two: ,} руб.\n\n'
+    await call.message.answer(f'{call_one}{call_two}Сумма: {(total_one + total_two): ,} руб.')
+    if not await db.db_check(call.from_user.id, "Admin"):
+        await bot.send_message(id_klient['bot'], f"{call.from_user.full_name} Долги у {call.data[3:]}")
+    await call.answer()
+
+
+@router.message(F.text == "⚙️ Мои долги")
+async def dolgi_one_value(message: Message, bot: Bot):
+    message_text = await db.db_surname_check(message.from_user.id)
+    list1, list2, sum1, sum2 = dolgi_user_2(message_text)
+    call_one, call_two = '', ''
+    total_one, total_two = 0, 0
+    if len(list1) > 0:
+        key_one, call_one = list1, f'{message_text} Готовые\n'
+        total_one = sum1
+        for i in key_one:
+            call_one += f'№ {i[0]} от {i[1]} - {i[2]: ,} руб.\n'
+        call_one += f'итого: {total_one: ,} руб.\n\n'
+    if len(list2) > 0:
+        key_two, call_two = list2, f'{message_text} еще в работе\n'
+        total_two = sum2
+        for j in key_two:
+            call_two += f'№ {j[0]} от {j[1]} - {j[2]: ,} руб.\n'
+        call_two += f'итого: {total_two: ,} руб.\n\n'
+    await message.answer(f'{call_one}{call_two}Сумма: {(total_one + total_two): ,} руб.')
+    if not await db.db_check(message.from_user.id, "Admin"):
+        await bot.send_message(id_klient['bot'], f"{message.from_user.full_name} Долги у {message_text}")
+
+
+@router.message(F.text == "⚙️ Мои заказы")
+async def client_one_value(message: Message, bot: Bot):
+    message_text = await db.db_surname_check(message.from_user.id)
+    call_lst = client_user(message_text).split('\n')
+    for j in range(0, len(call_lst), 130):
+        tmp = '\n'.join(call_lst[j:j + 130])
+        await message.answer(tmp)
+    if not await db.db_check(message.from_user.id, "Admin"):
+        await bot.send_message(id_klient['bot'], f"{message.from_user.full_name} Клиент {message_text}")
+
+
+@router.message(F.text == "👨‍💼 Клиенты")
+async def cmd_zarplata(message: Message):
+    await message.answer("Клиенты на букву:", reply_markup=kb.in_letter)
+
+
+@router.callback_query(F.data[:3] == "%%%")
+async def cmd_client(call: CallbackQuery):
+    in_kb = []
+    for key, value in client(call.data[-1]).items():
+        in_kb.append([InlineKeyboardButton(text=f'{key} {value: ,}', callback_data=f'%#%{call.data[-1]}{key}')])
+    keyboard = InlineKeyboardMarkup(inline_keyboard=in_kb)
+    if len(in_kb) != 0:
+        await call.message.answer("Клиенты", reply_markup=keyboard)
+    else:
+        await call.message.answer(f"Клиенты на букву {call.data[-1]} нет")
+    await call.answer()
+
+
+@router.callback_query(F.data[:3] == "%#%")
+async def client_value(call: CallbackQuery, bot: Bot):
+    message_text = call.data[4:]
+    call_lst = client_user(message_text).split('\n')
+    for j in range(0, len(call_lst), 130):
+        tmp = '\n'.join(call_lst[j:j + 130])
+        await call.message.answer(tmp)
+    if not await db.db_check(call.from_user.id, "Admin"):
+        await bot.send_message(id_klient['bot'], f"{call.from_user.full_name} Клиент {message_text}")
+    await call.answer()
+
+
+@router.message(F.text == "🚻 Сердюченко")
+async def reg_one(message: Message):
+    fms_list = [[InlineKeyboardButton(text="🔢 По номеру заказа?", callback_data="По номеру заказа")],
+                [InlineKeyboardButton(text="📅 По дате заказа?", callback_data="По дате заказа")]]
+    fms_keyboard = InlineKeyboardMarkup(inline_keyboard=fms_list)
+    await message.answer("Сердюченко", reply_markup=fms_keyboard)
+
+
+# FSM Context start number
+@router.callback_query(F.data == "По номеру заказа")
+async def reg_one(call: CallbackQuery, state: FSMContext):
+    await state.set_state(Reg.number1)
+    await call.message.answer("Введите начальный\nномер заказа")
+    await call.answer()
+
+
+@router.message(Reg.number1, F.text.isdigit(), F.text.len() == 4)
+async def reg_two(message: Message, state: FSMContext):
+    await state.update_data(number1=message.text)
+    await state.set_state(Reg.number2)
+    await message.answer("Введите Конечный\nномер заказа")
+
+
+@router.message(Reg.number1)
+async def reg_two(message: Message, state: FSMContext):
+    await message.answer("Только 4 цифры\nВведите начальный\nномер заказа")
+
+
+@router.message(Reg.number2, F.text.isdigit(), F.text.len() == 4)
+async def reg_three(message: Message, state: FSMContext):
+    await state.update_data(number2=message.text)
+    data = await state.get_data()
+    number_1, number_2 = data["number1"], data["number2"]
+    summ = dolgi_serdyuch(number_1, number_2)[0]
+    in_dolgi = [[InlineKeyboardButton(text=f'{number_1} --> {number_2} Сумма: {summ: ,}',
+                                      callback_data=f"NMB{number_1} {number_2}")]]
+    keyboard = InlineKeyboardMarkup(inline_keyboard=in_dolgi)
+    await message.answer("Сердюченко", reply_markup=keyboard)
+    await state.clear()
+
+
+@router.message(Reg.number2)
+async def reg_two(message: Message, state: FSMContext):
+    await message.answer("Только 4 цифры\nВведите Конечный\nномер заказа")
+
+
+@router.callback_query(F.data[:3] == "NMB")
+async def serdyuch_value(call: CallbackQuery):
+    number_1, number_2 = call.data[3:7], call.data[-4:]
+    summ, lst = dolgi_serdyuch(number_1, number_2)[0], '\n'.join(dolgi_serdyuch(number_1, number_2)[1])
+    lst += f'\n\nитого: {summ: ,}'
+    call_lst = lst.split('\n')
+    for j in range(0, len(call_lst), 130):
+        tmp = '\n'.join(call_lst[j:j + 130])
+        await call.message.answer(tmp)
+    await call.answer()
+
+
+# FSM Context finish number
+
+# FSM Context start data
+@router.callback_query(F.data == "По дате заказа")
+async def reg_data_one(call: CallbackQuery, state: FSMContext):
+    await state.set_state(Reg.data1)
+    await call.message.answer(f"Введите начальную дату заказа в \nформате день "
+                              f"{hunderline('точка')} месяц(пример 03.04)")
+    await call.answer()
+
+
+@router.message(Reg.data1, MyFilter(F.text))
+async def reg_data_two(message: Message, state: FSMContext):
+    await state.update_data(data1=message.text.replace(",", "."))
+    await state.set_state(Reg.data2)
+    await message.answer(f"Введите Конечную дату заказа в \nформате день "
+                         f"{hunderline('точка')} месяц(пример 03.04)")
+
+
+@router.message(Reg.data1)
+async def reg_two(message: Message):
+    await message.answer(f"Ошибка!!!\nВведите начальную дату заказа в \nформате день "
+                         f"{hunderline('точка')} месяц(пример 03.04)")
+
+
+@router.message(Reg.data2, MyFilter(F.text))
+async def reg_data_three(message: Message, state: FSMContext):
+    await state.update_data(data2=message.text.replace(",", "."))
+    data = await state.get_data()
+    data_1, data_2 = data["data1"], data["data2"]
+    summ = dolgi_ser_data(data_1, data_2)[0]
+    in_dolgi = [[InlineKeyboardButton(text=f'{data_1} --> {data_2} Сумма: {summ: ,}',
+                                      callback_data=f"DTA{data_1} {data_2}")]]
+    keyboard = InlineKeyboardMarkup(inline_keyboard=in_dolgi)
+    await message.answer("Сердюченко", reply_markup=keyboard)
+    await state.clear()
+
+
+@router.message(Reg.data2)
+async def reg_two(message: Message):
+    await message.answer(f"Ошибка!!!\nВведите Конечную дату заказа в \nформате день "
+                         f"{hunderline('точка')} месяц(пример 03.04)")
+
+
+@router.callback_query(F.data[:3] == "DTA")
+async def serdyuch_data_value(call: CallbackQuery):
+    data_1, data_2 = call.data[3:8], call.data[-5:]
+    summ, lst = dolgi_ser_data(data_1, data_2)[0], '\n'.join(dolgi_ser_data(data_1, data_2)[1])
+    lst += f'\n\nитого: {summ: ,}'
+    call_lst = lst.split('\n')
+    for j in range(0, len(call_lst), 130):
+        tmp = '\n'.join(call_lst[j:j + 130])
+        await call.message.answer(tmp)
+    await call.answer()
+
+
+# FSM Context finish data
+
+
+@router.message(F.text == "📝 Отчет")
+async def cmd_rasxodi_2(message: Message):
+    fms_list = [[InlineKeyboardButton(text=f"📆 Отчет за {today_func()}", callback_data="otchet za segodnya")],
+                [InlineKeyboardButton(text="📆 Отчет по дате", callback_data="Отчет по дате")]]
+    fms_keyboard = InlineKeyboardMarkup(inline_keyboard=fms_list)
+    await message.answer("Отчет", reply_markup=fms_keyboard)
+
+
+@router.callback_query(F.data == "otchet za segodnya")
+async def call_otchot(call: CallbackQuery, bot: Bot):
+    await call.message.answer(otchet(today_func()))
+    if call.from_user.id != id_klient['bot']:
+        await bot.send_message(id_klient['bot'], f"{call.from_user.full_name} Отчет за {today_func()}")
+    await call.answer()
+
+
+# FSM Context start info_otchot
+@router.callback_query(F.data == "Отчет по дате")
+async def reg_one_otchot(call: CallbackQuery, state: FSMContext):
+    await state.set_state(Reg.otchot)
+    await call.message.answer(f"Введите дату в формате\nдень {hunderline('точка')} месяц(пример 04.02)")
+    await call.answer()
+
+
+@router.message(Reg.otchot, MyFilter(F.text))
+async def reg_three_otchot(message: Message, state: FSMContext, bot: Bot):
+    await state.update_data(otchot=message.text.replace(",", "."))
+    data = await state.get_data()
+    await message.answer(otchet(data["otchot"]))
+    if not await db.db_check(message.from_user.id, "Admin"):
+        await bot.send_message(id_klient['bot'], f"{message.from_user.full_name} Отчет за {data['otchot']}")
+    await state.clear()
+
+
+@router.message(Reg.otchot)
+async def reg_two(message: Message):
+    await message.answer(f"Ошибка!!!\nВведите дату в формате\nдень {hunderline('точка')} месяц(пример 04.02)")
+
+
+# FSM Context finish otchot
+
+
+@router.message(F.text == "🚪 Форма фасадов")
+async def cmd_ris_valyut(message: Message):
+    await message.answer("Форма фасадов", reply_markup=kb.in_risunok)
+
+
+@router.callback_query(F.data[0] == "$")
+async def ris_value(call: CallbackQuery):
+    for i in os.listdir(f'./images/{call.data[1:]}'):
+        img = FSInputFile(f'images/{call.data[1:]}/{i}')
+        await call.message.answer_photo(img, caption=i.split('.')[0])
+    await call.answer()
+
+
+@router.message(F.text == "💰 Зарплата")
+async def cmd_zarplata(message: Message):
+    await message.answer("💸 Зарплата", reply_markup=kb.in_mesyac)
+
+
+@router.callback_query(F.data[:3] == "!!!")
+async def zorplata_value(call: CallbackQuery):
+    in_zarp = [[InlineKeyboardButton(text='Подробно', callback_data=f'&&&{call.data[3:]}')]]
+    keyboard = InlineKeyboardMarkup(inline_keyboard=in_zarp)
+    await call.message.answer(zarplata(call.data[3:])[0], reply_markup=keyboard)
+    await call.answer()
+
+
+@router.callback_query(F.data[:3] == "&&&")
+async def zorplata_podrobno_value(call: CallbackQuery):
+    call_list = zarplata(call.data[3:])[1].split('\n')
+    for j in range(0, len(call_list), 130):
+        tmp = '\n'.join(call_list[j:j + 130])
+        await call.message.answer(tmp)
+    await call.answer()
+
+
+@router.message(F.text == "❗ Инфо по заказу")
+async def info_order(message: Message):
+    fms_list = [[InlineKeyboardButton(text="🔢 Наш номер заказа", callback_data="Наш номер заказа")],
+                [InlineKeyboardButton(text="🔢 Номер Сердюченко", callback_data="Номер Сердюченко")]]
+    fms_keyboard = InlineKeyboardMarkup(inline_keyboard=fms_list)
+    await message.answer("Наш или Сердюченко?", reply_markup=fms_keyboard)
+
+
+# FSM Context start info_order
+@router.callback_query(F.data == "Наш номер заказа")
+async def reg_one_order_1(call: CallbackQuery, state: FSMContext):
+    await state.set_state(Reg.our_order)
+    await call.message.answer("Введите наш номер заказа")
+    await call.answer()
+
+
+@router.message(Reg.our_order, F.text.isdigit(), F.text.len() == 4)
+async def reg_three_order_1(message: Message, state: FSMContext):
+    await state.update_data(our_order=message.text)
+    data = await state.get_data()
+    await message.answer(serdyuch(data["our_order"]))
+    await state.clear()
+
+
+@router.message(Reg.our_order)
+async def reg_two(message: Message):
+    await message.answer("Ошибка!!!\nТолько 4 цифры")
+
+
+@router.callback_query(F.data == "Номер Сердюченко")
+async def reg_one_order_2(call: CallbackQuery, state: FSMContext):
+    await state.set_state(Reg.ser_order)
+    await call.message.answer("Введите номер Сердюченко")
+    await call.answer()
+
+
+@router.message(Reg.ser_order, F.text.isdigit(), F.text.len() == 4)
+async def reg_three_order_2(message: Message, state: FSMContext):
+    await state.update_data(ser_order=message.text)
+    data = await state.get_data()
+    ser_txt = serd_nomer_4(data["ser_order"])
+    await message.answer(serdyuch(ser_txt))
+    await state.clear()
+
+
+@router.message(Reg.ser_order)
+async def reg_two(message: Message):
+    await message.answer("Ошибка!!!\nТолько 4 цифры")
+
+
+# FSM Context finish info_order
+
+@router.message(F.text == "🪚 Раскрой")
+async def cmd_raskroy(message: Message):
+    call_lst = raskroy().split('\n')
+    for j in range(0, len(call_lst), 100):
+        tmp = '\n'.join(call_lst[j:j + 100])
+        await message.answer(f'{tmp}')
+
+
+@router.message(F.text == "🪚 Раскрой/ост.")
+async def cmd_raskroy_ost(message: Message):
+    call_lst = raskroy_ost().split('\n')
+    for j in range(0, len(call_lst), 120):
+        tmp = '\n'.join(call_lst[j:j + 120])
+        await message.answer(f'{tmp}')
+    # await message.answer(raskroy_ost())
+
+
+@router.message(F.text == "🕹 Фрезер")
+async def cmd_frezar(message: Message):
+    call_lst = frezer().split('\n')
+    for j in range(0, len(call_lst), 100):
+        tmp = '\n'.join(call_lst[j:j + 100])
+        await message.answer(f'{tmp}')
+
+
+@router.message(F.text == "⚙️ Пресс")
+async def cmd_press(message: Message):
+    call_lst = press().split('\n')
+    for j in range(0, len(call_lst), 100):
+        tmp = '\n'.join(call_lst[j:j + 100])
+        await message.answer(f'{tmp}')
+
+
+# FSM start Стоимость
+
+@router.message(F.text == "💷 Стоимость")
+async def cmd_price(message: Message, state: FSMContext):
+    await state.set_state(Reg.fasad)
+    await message.answer("Выберите форму фасада", reply_markup=kb.in_ris_price)
+
+
+@router.callback_query(Reg.fasad, F.data[:5] == "fasad")
+async def reg_one_price(call: CallbackQuery, state: FSMContext):
+    await state.update_data(fasad=call.data)
+    await state.set_state(Reg.tolshina)
+    fms_list = [[InlineKeyboardButton(text="10mm", callback_data="10_tolshina"),
+                 InlineKeyboardButton(text="16mm", callback_data="16_tolshina"),
+                 InlineKeyboardButton(text="19mm", callback_data="19_tolshina"),
+                 InlineKeyboardButton(text="22mm", callback_data="22_tolshina"),
+                 InlineKeyboardButton(text="32mm", callback_data="32_tolshina")]]
+    fms_keyboard = InlineKeyboardMarkup(inline_keyboard=fms_list)
+    await call.message.answer("Выберите толщину фасада", reply_markup=fms_keyboard)
+    await call.answer()
+
+
+@router.callback_query(Reg.tolshina, F.data[3:] == 'tolshina')
+async def reg_two_price(call: CallbackQuery, state: FSMContext):
+    await state.update_data(tolshina=call.data)
+    await state.set_state(Reg.plenka)
+    await call.message.answer("Выберите группу пленки", reply_markup=kb.in_group_pl)
+    await call.answer()
+
+
+@router.callback_query(Reg.plenka, F.data[:5] == 'group')
+async def reg_tree_price(call: CallbackQuery, state: FSMContext):
+    await state.update_data(plenka=call.data)
+    await state.set_state(Reg.plenka)
+    data = await state.get_data()
+    plen_ka, tol_shina, fas_ad, = int(data['plenka'][5:]), data['tolshina'][:2], data['fasad'][5:]
+    await call.message.answer(f"Форма фасад № {fas_ad}\nТолщина фасада {tol_shina}мм\nГруппа пленки {plen_ka}\n\n"
+                              f"Стоимость {price_summ(plen_ka, tol_shina, fas_ad)} руб. за кв.м")
+    await call.answer()
+
+
+# FSM finish Стоимость
+
+@router.message(F.text == '🟧 Пленки')
+async def cmd_price(message: Message):
+    fms_list = [[InlineKeyboardButton(text="по группам", callback_data="по группам"),
+                 InlineKeyboardButton(text="по номеру", callback_data="по номеру"),
+                 InlineKeyboardButton(text="по названию", callback_data="по названию"),
+                 ]]
+    fms_keyboard = InlineKeyboardMarkup(inline_keyboard=fms_list)
+    await message.answer("Как сортировать пленки", reply_markup=fms_keyboard)
+
+
+@router.callback_query(F.data == 'по номеру')
+async def po_nomeru(call: CallbackQuery):
+    call_lst = print_plenka_number().split('\n')
+    for j in range(0, len(call_lst), 100):
+        tmp = '\n'.join(call_lst[j:j + 100])
+        await call.message.answer(f'{tmp}')
+    await call.answer()
+
+
+@router.callback_query(F.data == 'по названию')
+async def po_nazvaniu(call: CallbackQuery):
+    call_lst = print_plenka_sort().split('\n')
+    for j in range(0, len(call_lst), 100):
+        tmp = '\n'.join(call_lst[j:j + 100])
+        await call.message.answer(f'{tmp}')
+    await call.answer()
+
+
+@router.callback_query(F.data == 'по группам')
+async def po_grupam(call: CallbackQuery):
+    await call.message.answer("Выберите группу пленки", reply_markup=kb.in_group_sort)
+    await call.answer()
+
+
+@router.callback_query(F.data[:4] == 'sort')
+async def reg_tree_price(call: CallbackQuery):
+    call_lst = print_plenka_group(call.data[4:]).split('\n')
+    for j in range(0, len(call_lst), 100):
+        tmp = '\n'.join(call_lst[j:j + 100])
+        await call.message.answer(f'{tmp}')
+    await call.answer()
+
+
+@router.message(F.text == '📊 Статистика')
+async def statics(message: Message):
+    await message.answer("Выберите 👇", reply_markup=kb.in_static_plenka)
+
+
+@router.callback_query(F.data == 'static_plenki')
+async def in_statics_pl(call: CallbackQuery):
+    call_lst = statistics_plenka().split('\n')
+    for j in range(0, len(call_lst), 100):
+        tmp = '\n'.join(call_lst[j:j + 100])
+        await call.message.answer(f'{tmp}')
+    await call.answer()
+
+
+@router.callback_query(F.data == 'static_fasad')
+async def in_statics_fs(call: CallbackQuery):
+    await call.message.answer(f'{statistics_fasad()}')
+    await call.answer()
+
+
+@router.callback_query(F.data == 'static_mdf')
+async def in_statics_fs(call: CallbackQuery):
+    await call.message.answer(f'{statistics_mdf()}')
+    await call.answer()

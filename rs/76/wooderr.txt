@@ -1,0 +1,10 @@
+Warnung: String ist leer (nicht uebersetzt) in Zeile: 209 
+Warnung: String ist leer (nicht uebersetzt) in Zeile: 351 
+Warnung: String ist leer (nicht uebersetzt) in Zeile: 701 
+Warnung: String ist leer (nicht uebersetzt) in Zeile: 1150 
+Warnung: String ist leer (nicht uebersetzt) in Zeile: 1579 
+Warnung: String ist leer (nicht uebersetzt) in Zeile: 2072 
+Warnung: String ist leer (nicht uebersetzt) in Zeile: 2073 
+Warnung: String ist leer (nicht uebersetzt) in Zeile: 2105 
+Warnung: String ist leer (nicht uebersetzt) in Zeile: 2109 
+Warnung: String ist leer (nicht uebersetzt) in Zeile: 2147 

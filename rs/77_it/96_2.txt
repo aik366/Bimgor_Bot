@@ -1,0 +1,10 @@
+  @ LINE_EP, 0 : lpx-f, fy+g+g/4, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-f+d/2, fy+g+g/4+d/2, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-f+d/2, fy+g+g/4+d/2+g/2, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-f+d, fy+g+g/4+d+g/2, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-f+d, fy+d+g/2, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-f+d-d/2, fy+d+g/2-d/2, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-f+d-d/2, fy+d-d/2, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-f, fy, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-f, fy+g+g/4, 0, 0, 0, 0, 0, 0, 0
+'TTTT2

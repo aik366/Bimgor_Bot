@@ -1,0 +1,5 @@
+  @ LINE_EP, 0 : CY, lpy-RAMY-OBV0, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : CY+6, lpy-RAMY-OBV0, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : CY+6, RAMY+OBV0, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : CY+RAM, RAMY+OBV0, 0, 0, 0, 0, 0, 0, 0
+' TTTTT

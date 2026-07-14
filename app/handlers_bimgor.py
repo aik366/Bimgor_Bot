@@ -1,0 +1,642 @@
+import asyncio
+from aiogram import Router, Bot, F
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import StatesGroup, State
+from aiogram.types import (CallbackQuery, FSInputFile, InlineKeyboardButton, InlineKeyboardMarkup, Message,
+                           ReplyKeyboardMarkup, KeyboardButton)
+from app import database as db
+from app import keyboards as kb
+from fas import *
+from config import *
+# from distutils.dir_util import copy_tree
+import shutil, pyautogui, psutil, os, zipfile
+from fasadit import fasad_italiya
+
+router = Router()
+
+
+def copy_directory(src, dst):
+    try:
+        shutil.copytree(src, dst, dirs_exist_ok=True)
+        print(f"Папка успешно скопирована: {src} -> {dst}")
+    except FileNotFoundError:
+        print(f"Исходная папка не найдена: {src}")
+    except PermissionError:
+        print(f"Нет прав для копирования в: {dst}")
+    except Exception as e:
+        print(f"Ошибка при копировании: {e}")
+        
+
+class Fasad(StatesGroup):
+    number = State()
+    tolshina = State()
+    kray = State()
+    freza = State()
+    radius = State()
+    risunok = State()
+    comment = State()
+    zakaz = State()
+    dimensions = State()
+    dir_del = State()
+
+
+zak_az = []
+
+
+@router.message(F.text == "Срочность")
+async def cmd_srochno(message: Message):
+    await message.answer(srochnost())
+    await message.answer(srochnost_bud())
+
+
+@router.message(F.text == "💵 Курсы валют")
+async def cmd_kursi_valyut(message: Message):
+    await message.answer(currency())
+
+
+@router.message(F.text == "Заказы")
+async def cmd_zakazi(message: Message):
+    f = open('DATA/n_zak.txt', 'r').read().split('|')
+    for i in range(len(f) - 1):
+        kb_in = [[InlineKeyboardButton(text='⚙ ' + f[i] + ' ⚙', style='success', callback_data=f'zakaz{f[i]}')]] + kb.kb_in
+        keyboard = InlineKeyboardMarkup(inline_keyboard=kb_in)
+        await message.answer(f"<pre>{serdyuch(f[i])}</pre>", reply_markup=keyboard)
+
+
+@router.message(F.text == "Доп. кнопки")
+async def cmd_fail_skrin(message: Message):
+    await message.answer("Доп-кнопки", reply_markup=kb.dop_kn)
+
+
+@router.callback_query(F.data == "papki_value")
+async def send_papki_value(call: CallbackQuery):
+    ss, nc, it = 'ss станок: ', 'nc станок: ', 'it станок: '
+    for i in os.listdir('.\ss'):
+        ss += i[:4] + '|'
+    for i in os.listdir('.\\nc'):
+        nc += i[:4] + '|'
+    for i in os.listdir('.\it'):
+        it += i[:4] + '|'
+    await call.message.answer(f'{ss}\n{nc}\n{it}')
+    await call.message.answer('zak_az: {}'.format('|'.join(zak_az)))
+    await call.answer()
+
+
+@router.callback_query(F.data == "del_value")
+async def send_del_value(call: CallbackQuery):
+    os.system('rmdir /S /Q "{}"'.format('ss'))
+    os.system('rmdir /S /Q "{}"'.format('nc'))
+    os.system('rmdir /S /Q "{}"'.format('it'))
+    os.makedirs('ss')
+    os.makedirs('nc')
+    os.makedirs('it')
+    await call.message.answer("Процесс удаления завершен")
+    await call.answer()
+
+
+@router.callback_query(F.data == "copyit_value_it")
+async def send_copyit_value_tt(call: CallbackQuery):
+    g = ''
+    if os.path.exists(put_555it):
+        for i in os.listdir('.\it'):
+            copy_directory('it/' + i, put_555it + "/" + i)
+            g += i[:4] + '|'
+        await call.message.answer('{} \nкопирования it станка завершен'.format(g))
+    else:
+        await call.message.answer('it stanok off')
+    await call.answer()
+
+
+@router.callback_query(F.data == "copync_value_nc")
+async def send_copync_value_ss(call: CallbackQuery):
+    g = ''
+    if os.path.exists(put_555nc):
+        for i in os.listdir('.\\nc'):
+            copy_directory('nc/' + i, put_555nc + "/" + i)
+            g += i[:4] + '|'
+        await call.message.answer('{} \nкопирования nc станка завершен'.format(g))
+    else:
+        await call.message.answer('nc stanok off')
+    await call.answer()
+
+
+@router.callback_query(F.data == "copyss_value_ss")
+async def send_copyss_value_nc(call: CallbackQuery):
+    if os.path.exists(put_555ss):
+        for i in os.listdir('.\ss'):
+            copy_directory('ss/' + i, put_555ss + "/" + i)
+            if i[:4] not in zak_az:
+                zak_az.append(i[:4])
+        await call.message.answer('{} \nкопирования ss станка завершен'.format('|'.join(zak_az)))
+    else:
+        await call.message.answer('ss stanok off')
+    await call.answer()
+
+
+@router.callback_query(F.data == "copy_value")
+async def send_copy_value(call: CallbackQuery):
+    if os.path.exists(put_555it):
+        copy_directory(put_it, put_555it)
+        await call.message.answer("копирования it станка завершен")
+    else:
+        await call.message.answer('it stanok off')
+
+    if os.path.exists(put_555nc):
+        copy_directory(put_nc, put_555nc)
+        await call.message.answer("копирования nc станка завершен")
+    else:
+        await call.message.answer('nc stanok off')
+
+    if os.path.exists(put_555ss):
+        copy_directory(put_ss, put_555ss)
+        for i in os.listdir(put_ss):
+            if len(i) == 5 and i[-1] == 'h' and i[:4] not in zak_az:
+                zak_az.append(i[:4])
+        await call.message.answer("{} копирования ss станка завершен".format('|'.join(zak_az)))
+    else:
+        await call.message.answer('ss stanok off')
+    await call.answer()
+
+
+@router.callback_query(F.data == "zk_Del_value")
+async def send_zk_del_value(call: CallbackQuery):
+    for i in os.listdir(put_ss):
+        if len(i) > 4 and i[3].isdigit():
+            os.system('rmdir /S /Q "{}"'.format(put_ss + i))
+    for i in os.listdir(put_nc):
+        if len(i) > 4 and i[3].isdigit():
+            os.system('rmdir /S /Q "{}"'.format(put_nc + i))
+    for i in os.listdir(put_it):
+        if len(i) > 4 and i[3].isdigit():
+            os.system('rmdir /S /Q "{}"'.format(put_it + i))
+    await call.message.answer(f"Процесс удаления завершен")
+    await call.answer()
+
+
+@router.callback_query(F.data == "otmetka_value")
+async def otmetka_value(call: CallbackQuery):
+    shutil.copyfile(f'{put}{month}.RSB', 'DATA/22.txt')
+    await call.message.answer("Обновлено!!!", otmetka_program(zak_az))
+    zak_az.clear()
+    await call.answer()
+
+
+@router.callback_query(F.data == "proc_value")
+async def send_proc_value(call: CallbackQuery):
+    temp_true = "FasadMDF.exe" in (p.name() for p in psutil.process_iter())
+    await call.message.answer(str(temp_true))
+    await call.answer()
+
+
+@router.callback_query(F.data == "proc_otmetka_value")
+async def send_proc_value(call: CallbackQuery):
+    while True:
+        temp_true = "FasadMDF.exe" in (p.name() for p in psutil.process_iter())
+        if not temp_true:
+            shutil.copyfile(f'{put}{month}.RSB', 'DATA/22.txt')
+            await call.message.answer("Обновлено!!!", otmetka_program(zak_az))
+            zak_az.clear()
+            break
+        await asyncio.sleep(20)
+
+
+@router.callback_query(F.data == "skrin_value")
+async def send_skrin_value(call: CallbackQuery):
+    pyautogui.screenshot('DATA/33.png')
+    cat = FSInputFile('DATA/33.png')
+    await call.message.answer_document(cat)
+    await call.answer()
+
+
+@router.callback_query(F.data == "fail_value")
+async def send_fail_value(call: CallbackQuery):
+    shutil.copyfile(f"{put}{month}.RSB", f"files/Заказы{month}.RSB")
+    shutil.copyfile(f"{put_ras}", f"files/расходы.RSB")
+    # shutil.copyfile(f"{put}{month_1}.RSB", f"files/Заказы{month_1}.RSB")
+    # shutil.copyfile(f"{put_dat}", f"files/DAT.DB")
+    # shutil.copyfile(f"{put_fasad}", f"files/Fasad.db")
+    for i in os.listdir(f'./files/'):
+        file = FSInputFile(f'files/{i}')
+        await call.message.answer_document(file, caption=i)
+    await call.answer()
+
+
+@router.message(F.document)
+async def get_user_document(message: Message, bot: Bot):
+    file_id = message.document.file_id
+    await message.answer('Загрузка...')
+    file = await bot.get_file(file_id)
+    file_path = file.file_path
+    if message.document.file_name[-3:] == 'zip':
+        await bot.download_file(file_path, f"DATA/file.zip")
+        with zipfile.ZipFile(f"DATA/file.zip", 'r') as zip_ref:
+            for i in zip_ref.namelist():
+                if len(i) > 14:
+                    if i[7] == 'h':
+                        zip_ref.extract(i, path=put_ss_zip)
+                    elif i[7] == 'n':
+                        zip_ref.extract(i, path=put_nc_zip)
+                    elif i[7] == 'i':
+                        zip_ref.extract(i, path=put_it_zip)
+    else:
+        await bot.download_file(file_path, f"DATA/text.txt")
+    await message.answer(f"{message.document.file_name} скачан")
+
+
+@router.callback_query(F.data == "temp_value")
+async def send_temp_value(call: CallbackQuery):
+    shutil.copyfile('DATA/text.txt', 'DATA/22.txt')
+    await call.message.answer("Временно обновлено!")
+    await call.answer()
+
+
+bez_frez = [0] * 11
+
+
+@router.callback_query(F.data == "value_156")
+async def value_157(call: CallbackQuery):
+    await call.message.answer("Без расширения")
+    bez_frez[0] = 1
+    await call.answer()
+
+
+@router.callback_query(F.data == "value_144_1")
+async def value_144_1(call: CallbackQuery):
+    await call.message.answer("Без 144_1")
+    bez_frez[1] = 1
+    await call.answer()
+
+
+@router.callback_query(F.data == "value_144_2")
+async def value_144_2(call: CallbackQuery):
+    await call.message.answer("Без 144_2")
+    bez_frez[2] = 1
+    await call.answer()
+
+
+@router.callback_query(F.data == "value_144_3")
+async def value_144_3(call: CallbackQuery):
+    await call.message.answer("Без 144_3")
+    bez_frez[3] = 1
+    await call.answer()
+
+
+@router.callback_query(F.data == "value_45")
+async def value_pod_45(call: CallbackQuery):
+    await call.message.answer("под 45")
+    bez_frez[4] = 1
+    await call.answer()
+
+
+@router.callback_query(F.data == "value_136_1")
+async def value_136_1(call: CallbackQuery):
+    await call.message.answer("Без 136_1")
+    bez_frez[5] = 1
+    await call.answer()
+
+
+@router.callback_query(F.data == "value_136_2")
+async def value_136_2(call: CallbackQuery):
+    await call.message.answer("Без 136_2")
+    bez_frez[6] = 1
+    await call.answer()
+
+
+@router.callback_query(F.data == "value_136_3")
+async def value_136_3(call: CallbackQuery):
+    await call.message.answer("Без 136_3")
+    bez_frez[7] = 1
+    await call.answer()
+
+
+@router.callback_query(F.data == "value_bez_xdf")
+async def value_bez_xdf(call: CallbackQuery):
+    await call.message.answer("Без хдф")
+    bez_frez[8] = 1
+    await call.answer()
+
+
+@router.callback_query(F.data == "value_ramy_45")
+async def value_ramy(call: CallbackQuery):
+    await call.message.answer("стандартная ширина рамки")
+    bez_frez[9] = 1
+    await call.answer()
+
+
+@router.callback_query(F.data == "value_92")
+async def value_pod_92(call: CallbackQuery):
+    await call.message.answer("под 92")
+    bez_frez[10] = 1
+    await call.answer()
+
+
+@router.callback_query(F.data[:5] == 'zakaz')
+async def cmd_zaks(call: CallbackQuery):
+    await call.message.answer(f'Заказ {call.data[-4:]} Готов', fasad_italiya(call.data[-4:], '5',
+                                                                             bez_frez[0], bez_frez[1], bez_frez[2],
+                                                                             bez_frez[3], bez_frez[4], bez_frez[5],
+                                                                             bez_frez[6], bez_frez[7], bez_frez[8],
+                                                                             bez_frez[9], bez_frez[10]))
+    bez_frez[0], bez_frez[1], bez_frez[2], bez_frez[3], bez_frez[4] = 0, 0, 0, 0, 0
+    bez_frez[5], bez_frez[6], bez_frez[7], bez_frez[8], bez_frez[9], bez_frez[10] = 0, 0, 0, 0, 0, 0
+    await call.answer()
+
+
+@router.callback_query(F.data == "do_facade")
+async def fasad_number(call: CallbackQuery, state: FSMContext):
+    await state.set_state(Fasad.zakaz)
+    await state.update_data(fasad_line=[])
+    await call.message.answer("Выберите номер заказа")
+    await call.answer()
+
+
+@router.message(Fasad.zakaz)
+async def fasad_number(message: Message, state: FSMContext):
+    await state.update_data(zakaz=message.text)
+    await state.set_state(Fasad.number)
+    await message.answer("Выберите номер фасада", reply_markup=kb.in_ris_facade)
+
+
+@router.callback_query(Fasad.number, F.data[:6] == "facade")
+async def fasad_tolshina(call: CallbackQuery, state: FSMContext):
+    await state.update_data(number=call.data[6:])
+    await state.set_state(Fasad.tolshina)
+    fms_list = [[InlineKeyboardButton(text="10mm", callback_data="10_tolshina"),
+                 InlineKeyboardButton(text="16mm", callback_data="16_tolshina"),
+                 InlineKeyboardButton(text="19mm", callback_data="19_tolshina"),
+                 InlineKeyboardButton(text="22mm", callback_data="22_tolshina"),
+                 InlineKeyboardButton(text="32mm", callback_data="32_tolshina")]]
+    fms_keyboard = InlineKeyboardMarkup(inline_keyboard=fms_list)
+    await call.message.answer("Выберите толщину фасада", reply_markup=fms_keyboard)
+    await call.answer()
+
+
+@router.callback_query(Fasad.tolshina, F.data[3:] == "tolshina")
+async def fasad_kray(call: CallbackQuery, state: FSMContext):
+    await state.update_data(tolshina=call.data[:2])
+    await state.set_state(Fasad.kray)
+    fms_list = [[InlineKeyboardButton(text="11", callback_data="11_kray"),
+                 InlineKeyboardButton(text="12", callback_data="12_kray"),
+                 InlineKeyboardButton(text="13", callback_data="13_kray"),
+                 InlineKeyboardButton(text="14", callback_data="14_kray"),
+                 InlineKeyboardButton(text="15", callback_data="15_kray")],
+                [InlineKeyboardButton(text="16", callback_data="16_kray"),
+                 InlineKeyboardButton(text="17", callback_data="17_kray"),
+                 InlineKeyboardButton(text="18", callback_data="18_kray"),
+                 InlineKeyboardButton(text="19", callback_data="19_kray"),
+                 InlineKeyboardButton(text="20", callback_data="20_kray")]
+                ]
+    fms_keyboard = InlineKeyboardMarkup(inline_keyboard=fms_list)
+    await call.message.answer("Выберите край фасада", reply_markup=fms_keyboard)
+    await call.answer()
+
+
+@router.callback_query(Fasad.kray, F.data[3:] == "kray")
+async def fasad_freza(call: CallbackQuery, state: FSMContext):
+    await state.update_data(kray=call.data[:2])
+    await state.set_state(Fasad.freza)
+    fms_list = [[InlineKeyboardButton(text="21", callback_data="21_freza"),
+                 InlineKeyboardButton(text="22", callback_data="22_freza"),
+                 InlineKeyboardButton(text="23", callback_data="23_freza"),
+                 InlineKeyboardButton(text="24", callback_data="24_freza"),
+                 InlineKeyboardButton(text="26", callback_data="26_freza")],
+                [InlineKeyboardButton(text="28", callback_data="28_freza"),
+                 InlineKeyboardButton(text="29", callback_data="29_freza"),
+                 InlineKeyboardButton(text="30", callback_data="30_freza"),
+                 InlineKeyboardButton(text="БФ", callback_data="БФ_freza"),
+                 InlineKeyboardButton(text="ФП", callback_data="ФП_freza")]
+                ]
+    fms_keyboard = InlineKeyboardMarkup(inline_keyboard=fms_list)
+    await call.message.answer("Выберите фрезу фасада", reply_markup=fms_keyboard)
+    await call.answer()
+
+
+@router.callback_query(Fasad.freza, F.data[3:] == "freza")
+async def fasad_radius(call: CallbackQuery, state: FSMContext):
+    await state.update_data(freza=call.data[:2])
+    await state.set_state(Fasad.radius)
+    fms_list = [[InlineKeyboardButton(text="R1", callback_data="R1_Radius"),
+                 InlineKeyboardButton(text="R2", callback_data="R2_Radius"),
+                 InlineKeyboardButton(text="R3", callback_data="R3_Radius"),
+                 InlineKeyboardButton(text="R4", callback_data="R4_Radius"),
+                 InlineKeyboardButton(text="R5", callback_data="R5_Radius")],
+                ]
+    fms_keyboard = InlineKeyboardMarkup(inline_keyboard=fms_list)
+    await call.message.answer("Выберите радиус фасада", reply_markup=fms_keyboard)
+    await call.answer()
+
+
+@router.callback_query(Fasad.radius, F.data[3:] == "Radius")
+async def fasad_risunok(call: CallbackQuery, state: FSMContext):
+    await state.update_data(radius=call.data[:2])
+    await state.set_state(Fasad.risunok)
+    await call.message.answer("Выберите вид фасада", reply_markup=kb.in_vid_facade)
+    await call.answer()
+
+
+@router.callback_query(Fasad.risunok, F.data[-4:] == "_Ris")
+async def fasad_all(call: CallbackQuery, state: FSMContext):
+    await state.update_data(risunok=call.data[:-4])
+    await state.set_state(Fasad.comment)
+    fms_list = [[InlineKeyboardButton(text="нет", callback_data=" _com"),
+                 InlineKeyboardButton(text="4 окошек", callback_data="4_com"),
+                 InlineKeyboardButton(text="8 окошек", callback_data="8_com")], ]
+    fms_keyboard = InlineKeyboardMarkup(inline_keyboard=fms_list)
+    await call.message.answer("Пишите примечания к заказу", reply_markup=fms_keyboard)
+    await call.answer()
+
+
+@router.callback_query(Fasad.comment, F.data[-4:] == "_com")
+async def fasad_zakaz(call: CallbackQuery, state: FSMContext):
+    await state.update_data(comment=call.data[:-4])
+    await state.set_state(Fasad.dimensions)
+    await call.message.answer("Пишите размеры через пробел\nили нажмите на отмена")
+    await call.answer()
+
+
+@router.message(Fasad.dimensions)
+async def fasad_all(message: Message, state: FSMContext):
+    await state.update_data(dimensions=message.text)
+    d = await state.get_data()
+    dlina, shirina = message.text.split()
+    d['fasad_line'] += [
+        f"{dlina}.{shirina}.{d['number']}.{d['kray']}.{d['freza']}.{d['risunok']}.{d['tolshina']}мм {d['radius']} {d['comment']}"]
+    fms_list = [[InlineKeyboardButton(text="С начало", callback_data="beginning"),
+                 InlineKeyboardButton(text="Вид фасада", callback_data="view_facade")],
+                [InlineKeyboardButton(text="еще размеры", callback_data="add_dimensions"),
+                 InlineKeyboardButton(text="завершить", callback_data="Complete")], ]
+    fms_keyboard = InlineKeyboardMarkup(inline_keyboard=fms_list)
+    await message.answer(f"{dlina}x{shirina} добавлен", reply_markup=fms_keyboard)
+
+
+@router.callback_query(F.data == "beginning")
+async def fasad_all(call: CallbackQuery, state: FSMContext):
+    await state.set_state(Fasad.number)
+    await call.message.answer("Выберите номер фасада", reply_markup=kb.in_ris_facade)
+    await call.answer()
+
+
+@router.callback_query(F.data == "view_facade")
+async def fasad_all(call: CallbackQuery, state: FSMContext):
+    await state.set_state(Fasad.risunok)
+    await call.message.answer("Выберите вид фасада", reply_markup=kb.in_vid_facade)
+    await call.answer()
+
+
+@router.callback_query(F.data == "add_dimensions")
+async def fasad_all(call: CallbackQuery, state: FSMContext):
+    await state.set_state(Fasad.dimensions)
+    await call.message.answer("Пишите размеры через пробел\nили нажмите на отмена")
+    await call.answer()
+
+
+@router.callback_query(F.data == "Complete")
+async def fasad_all(call: CallbackQuery, state: FSMContext):
+    d = await state.get_data()
+    fas_line = '\n'.join(d['fasad_line'])
+    zakaz_one(fas_line, d['zakaz'])
+    await call.message.answer(f"заказ {d['zakaz']} завершен")
+    await state.clear()
+    await call.answer()
+
+
+@router.callback_query(F.data == "dir_delete")
+async def delete_dir(call: CallbackQuery, state: FSMContext):
+    await state.set_state(Fasad.dir_del)
+    await call.message.answer("Пишите папку для удаления\nили в конце it или ss")
+    await call.answer()
+
+
+@router.message(Fasad.dir_del)
+async def delete_it_ss(message: Message, state: FSMContext):
+    await state.update_data(dir_del=message.text)
+    try:
+        if len(message.text) == 4:
+            shutil.rmtree(f"{put_555it}/{message.text}it")
+            shutil.rmtree(f"{put_555ss}/{message.text}h")
+            await message.answer("удаление завершено")
+            return
+        if message.text[-2:].lower() == 'it':
+            shutil.rmtree(f"{put_555it}/{message.text}")
+            await message.answer(f"удаление {message.text} завершено")
+        elif message.text[-2:].lower() == 'ss':
+            shutil.rmtree(f"{put_555ss}/{message.text[:4]}h")
+            await message.answer(f"удаление {message.text} завершено")
+    except Exception as ex:
+        await message.answer(f"ошибка! {ex}, проверьте папку")
+    await state.clear()
+
+
+
+
+@router.callback_query()
+async def cmd_zaks(call: CallbackQuery):
+    await call.message.reply(f'ошибка! {call.data}')
+    await call.answer()
+
+
+@router.message(F.text.len() == 6)
+async def text_proc(message: Message) -> None:
+    try:
+        if message.text[-2:].lower() == 'ss':
+            if os.path.isdir(put_555ss + "/" + message.text[:4] + "h"):
+                # shutil.copytree(put_555ss + "/" + message.text[:4] + "h", put_ss + message.text[:4] + "h")
+                shutil.make_archive(f"{put_ss}ss", 'zip', put_555ss + "/" + message.text[:4] + "h")
+                file = FSInputFile(f"{put_ss}ss.zip")
+                await message.answer_document(file)
+                await message.answer("копирования завершен")
+                os.remove(put_ss + "ss.zip")
+            else:
+                await message.answer('ss stanok off или нет заказа')
+
+        elif message.text[-2:].lower() == 'it':
+            if os.path.isdir(put_555it + "/" + message.text[:4] + "it"):
+                shutil.make_archive(f"{put_it}it", 'zip', put_555it + "/" + message.text[:4] + "it")
+                file = FSInputFile(f"{put_it}it.zip")
+                await message.answer_document(file)
+                await message.answer("копирования завершен")
+                os.remove(put_it + "it.zip")
+            else:
+                await message.answer('it stanok off или нет заказа')
+
+        elif message.text[-2:].lower() == 'nc':
+            if os.path.isdir(put_555nc + "/" + message.text[:4] + "nc"):
+                shutil.make_archive(f"{put_nc}nc", 'zip', put_555nc + "/" + message.text[:4] + "nc")
+                file = FSInputFile(f"{put_nc}nc.zip")
+                await message.answer_document(file)
+                await message.answer("копирования завершен")
+                os.remove(put_nc + "nc.zip")
+            else:
+                await message.answer('nc stanok off или нет заказа')
+
+        elif message.text[:2].lower() == 'ss':
+            zak_az.append(message.text[2:])
+            await message.answer(f'{message.text[2:]} Добавлен в массив zak_az')
+
+        else:
+            await message.reply('ошибка!')
+
+    except Exception:
+        await message.reply('Удалите папку')
+
+
+@router.message(F.text.len().in_([4, 5]))
+async def echo_send(message: Message, bot: Bot):
+    if await db.db_check(message.from_user.id, "Admin"):
+        try:
+            ms_txt = serd_nomer(message.text, "Сердюченко") if len(message.text) == 5 else message.text
+            kb_in = [[InlineKeyboardButton(text='⚙ ' + ms_txt + ' ⚙', callback_data=f'zakaz{message.text}')]] + kb.kb_in
+            keyboard = InlineKeyboardMarkup(inline_keyboard=kb_in)
+            await message.answer(f"<pre>{serdyuch(ms_txt)}</pre>", reply_markup=keyboard)
+
+        except Exception:
+            await message.reply('ошибка!')
+
+    elif await db.db_check(message.from_user.id, "Ser"):
+        try:
+            ms_txt = serd_nomer_4(message.text, "Сердюченко")
+            await message.answer(f"<pre>{serdyuch(ms_txt)}</pre>")
+            await bot.send_message(id_klient['bot'], f'Сердюченко {message.text} -> {ms_txt}')
+
+        except Exception:
+            await message.reply('ошибка!')
+
+    elif await db.db_check(message.from_user.id, "Ellion"):
+        try:
+            ms_txt = serd_nomer_4(message.text, "Эллион")
+            await message.answer(f"<pre>{serdyuch(ms_txt)}</pre>")
+            await bot.send_message(id_klient['bot'], f'Эллион {message.text} -> {ms_txt}')
+
+        except Exception:
+            await message.reply('ошибка!')
+
+    elif await db.db_check(message.from_user.id, "Frezer") or await db.db_check(message.from_user.id, "sklad"):
+        try:
+            ms_txt = serd_nomer(message.text, "Сердюченко") if len(message.text) == 5 else message.text
+            await message.answer(f"<pre>{serdyuch(ms_txt)}</pre>")
+
+        except Exception:
+            await message.reply('ошибка!')
+
+    else:
+        try:
+            ms_txt = message.text
+            await message.answer(f"<pre>{order_name(ms_txt, await db.db_surname_check(message.from_user.id))}</pre>")
+
+        except Exception:
+            await message.reply('ошибка!')
+
+
+@router.message(F.text[:2] == "##")
+async def echo_zakaz_one(message: Message):
+    await message.answer('Добавлен в заказ', zakaz_one(message.text[2:]))
+
+
+@router.message(F.text[:3] == "$$$")
+async def echo_otchet_one(message: Message):
+    await message.answer(f'Добавлен в заказ {message.text[3:]}', net_otchot(message.text[3:]))
+
+
+@router.message()
+async def echo(message: Message):
+    await message.reply('ошибка!')

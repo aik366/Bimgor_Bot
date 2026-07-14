@@ -1,0 +1,5 @@
+  @ LINE_EP, 0 : j2, RAMY+27, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : j2-6, RAMY+27, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : j2-6, lpy-RUM2, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : j2-RAM, lpy-RYM2, 0, 0, 0, 0, 0, 0, 0
+' HHHHH

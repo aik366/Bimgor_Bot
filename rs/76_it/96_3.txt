@@ -1,0 +1,10 @@
+  @ LINE_EP, 0 : lpx-f2x-d/2, lpy-f, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-f2x-d/2, lpy-f-4.5, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-f2x-d/2+d/3, lpy-f-4.5, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-f2x-d/2+d/3, lpy-f-9, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-f2x-d/2+d/3-d, lpy-f-9, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-f2x-d/2+d/3-d, lpy-f-4.5, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-f2x-d/2+d/3-d+d/3, lpy-f-4.5, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-f2x-d/2+d/3-d+d/3, lpy-f, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-f2x-d/2+d/3-d+d/3-d/2, lpy-f, 0, 0, 0, 0, 0, 0, 0
+'TTTT3

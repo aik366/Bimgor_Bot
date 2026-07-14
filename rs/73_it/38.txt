@@ -1,0 +1,5 @@
+  @ LINE_EP, 0 : lpx-RAMX-OBV0, CY, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMX-OBV0, CY+6, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMX+OBV0, CY+6, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMX+OBV0, CY+RAM, 0, 0, 0, 0, 0, 0, 0
+' TTTTT

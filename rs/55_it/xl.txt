@@ -1,0 +1,206 @@
+@ ROUT, 0 : "157", 0, "1", 0, 0, "", 1, 18, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -1, 0, 5000, 18000, 0, 8000, "157", 103, 1, 0, 0, 90, 0, 0, 0, 0, 0, 0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 5, 0, 20, 80, 60, 0, "", "", "ROUT", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 0.1, 0, 0, 0, 1, 110
+  @ START_POINT, 0 : RAMY+OBV0+10, RAMY+OBV0, 0
+  @ LINE_EP, 0 : RAMY+OBV0+80, RAMY+OBV0, 0, T_9, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV0, RAMY+OBV0, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV0, lpy-h0, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAM0, lpy-h0, 0, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : lpx-kory0, lpy-korx0, rRr1+OBV0, 2, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : kory0, lpy-korx0, rRr2-OBV0, 1, 0, 0, 0, 0, 0, 1
+  @ ARC_EPRA, 0 : RAM0, lpy-h0, rRr1+OBV0, 2, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV0, lpy-h0, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV0, RAMY+OBV0, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV0+90, RAMY+OBV0, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV0+110, RAMY+OBV0, 0, -1, 0, 0, 0, 0, 0
+  @ ENDPATH, 0 :
+
+@ ROUT, 0 : "156", 0, "1", 0, 0, "", 1, 18, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -1, 0, 5000, 18000, 0, 8000, "156", 103, 1, 0, 0, 90, 0, 0, 0, 0, 0, 0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 5, 0, 20, 80, 60, 0, "", "", "ROUT", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 0.1, 0, 0, 0, 1, 110
+  @ START_POINT, 0 : RAMY+OBV1+10, RAMY+OBV1, 0
+  @ LINE_EP, 0 : RAMY+OBV1+80, RAMY+OBV1, 0, T_9, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV1, RAMY+OBV1, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV1, lpy-h1, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAM1, lpy-h1, 0, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : lpx-kory1, lpy-korx1, rRr1+OBV1, 2, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : kory1, lpy-korx1, rRr2-OBV1, 1, 0, 0, 0, 0, 0, 1
+  @ ARC_EPRA, 0 : RAM1, lpy-h1, rRr1+OBV1, 2, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV1, lpy-h1, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV1, RAMY+OBV1, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV1+90, RAMY+OBV1, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV1+110, RAMY+OBV1, 0, -1, 0, 0, 0, 0, 0
+  @ ENDPATH, 0 :
+
+@ ROUT, 0 : "150", 0, "1", 0, 0, "", 1, 18, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -1, 0, 5000, 18000, 0, 8000, "150", 103, 1, 0, 0, 90, 0, 0, 0, 0, 0, 0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 5, 0, 20, 80, 60, 0, "", "", "ROUT", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 0.1, 0, 0, 0, 1, 110
+  @ START_POINT, 0 : RAMY+OBV4+10, RAMY+OBV4, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV4, RAMY+OBV4, T_9, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV4, lpy-h4, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAM4, lpy-h4, 0, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : lpx-kory4, lpy-korx4, rRr1+OBV4, 2, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : kory4, lpy-korx4, rRr2-OBV4, 1, 0, 0, 0, 0, 0, 1
+  @ ARC_EPRA, 0 : RAM4, lpy-h4, rRr1+OBV4, 2, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV4, lpy-h4, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV4, RAMY+OBV4, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV4+30, RAMY+OBV4, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV4+60, RAMY+OBV4, 0, -1, 0, 0, 0, 0, 0
+  @ ENDPATH, 0 :
+
+@ ROUT, 0 : "150", 0, "1", 0, 0, "", 1, 18, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -1, 0, 5000, 18000, 0, 8000, "150", 103, 1, 0, 0, 90, 0, 0, 0, 0, 0, 0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 5, 0, 20, 80, 60, 0, "", "", "ROUT", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 0.1, 0, 0, 0, 1, 110
+  @ START_POINT, 0 : RAMY+OBV3+10, RAMY+OBV3, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV3, RAMY+OBV3, T_3, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV3, lpy-h3, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAM3, lpy-h3, 0, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : lpx-kory3, lpy-korx3, rRr1+OBV3, 2, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : kory3, lpy-korx3, rRr2-OBV3, 1, 0, 0, 0, 0, 0, 1
+  @ ARC_EPRA, 0 : RAM3, lpy-h3, rRr1+OBV3, 2, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV3, lpy-h3, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV3, RAMY+OBV3, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV3+30, RAMY+OBV3, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV3+60, RAMY+OBV3, 0, -1, 0, 0, 0, 0, 0
+  @ ENDPATH, 0 :
+
+' kray18  
+
+@ ROUT, 0 : "144", 0, "1", 0, 0, "", 1, 18, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -1, 0, 5000, 18000, 0, 8000, "144", 103, 1, 0, 0, 90, 0, 0, 0, 0, 0, 0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 5, 0, 20, 80, 60, 0, "", "", "ROUT", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 0.1, 0, 0, 0, 1, 110
+  @ START_POINT, 0 : RAMY+OBV6+10, RAMY+OBV6, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV6, RAMY+OBV6, T_9, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV6+10, RAMY+OBV6-10, 0, -10, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV6, RAMY+OBV6, 0, 10, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV6, lpy-h6, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV6+10, lpy-h6+10, 0, -10, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV6, lpy-h6, 0, 10, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAM6, lpy-h6, 0, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : lpx-kory6, lpy-korx6, rRr1+OBV6, 2, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yd0, lpy-xd0, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yd1, lpy-xd1, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yd2, lpy-xd2, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yd3, lpy-xd3, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yd4, lpy-xd4, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yd5, lpy-xd5, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yd4, lpy-xd4, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yd3, lpy-xd3, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yd2, lpy-xd2, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yd1, lpy-xd1, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yd0, lpy-xd0, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-kory6, lpy-korx6, 0, 1, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : kory6, lpy-korx6, rRr2-OBV6, 1, 0, 0, 0, 0, 0, 1
+  @ LINE_EP, 0 : yd0, lpy-xd0, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yd1, lpy-xd1, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yd2, lpy-xd2, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yd3, lpy-xd3, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yd4, lpy-xd4, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yd5, lpy-xd5, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yd4, lpy-xd4, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yd3, lpy-xd3, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yd2, lpy-xd2, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yd1, lpy-xd1, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yd0, lpy-xd0, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : kory6, lpy-korx6, 0, 1, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : RAM6, lpy-h6, rRr1+OBV6, 2, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV6, lpy-h6, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV6-10, lpy-h6+10, 0, -10, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV6, lpy-h6, 0, 10, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV6, RAMY+OBV6, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV6-10, RAMY+OBV6-10, 0, -10, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV6, RAMY+OBV6, 0, 10, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV6+30, RAMY+OBV6, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV6+60, RAMY+OBV6, 0, -1, 0, 0, 0, 0, 0
+  @ ENDPATH, 0 :
+  
+@ ROUT, 0 : "144", 0, "1", 0, 0, "", 1, 18, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -1, 0, 5000, 18000, 0, 8000, "144", 103, 1, 0, 0, 90, 0, 0, 0, 0, 0, 0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 5, 0, 20, 80, 60, 0, "", "", "ROUT", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 0.1, 0, 0, 0, 1, 110
+  @ START_POINT, 0 : RAMY+OBV5+10, RAMY+OBV5, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV5, RAMY+OBV5, T_3, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV5+10, RAMY+OBV5-10, 0, -10, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV5, RAMY+OBV5, 0, 10, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV5, lpy-h5, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV5+10, lpy-h5+10, 0, -10, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV5, lpy-h5, 0, 10, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAM5, lpy-h5, 0, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : lpx-kory5, lpy-korx5, rRr1+OBV5, 2, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yc0, lpy-xc0, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yc1, lpy-xc1, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yc2, lpy-xc2, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yc3, lpy-xc3, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yc4, lpy-xc4, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yc5, lpy-xc5, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yc4, lpy-xc4, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yc3, lpy-xc3, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yc2, lpy-xc2, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yc1, lpy-xc1, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-yc0, lpy-xc0, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-kory5, lpy-korx5, 0, 1, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : kory5, lpy-korx5, rRr2-OBV5, 1, 0, 0, 0, 0, 0, 1
+  @ LINE_EP, 0 : yc0, lpy-xc0, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yc1, lpy-xc1, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yc2, lpy-xc2, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yc3, lpy-xc3, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yc4, lpy-xc4, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yc5, lpy-xc5, 0, -1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yc4, lpy-xc4, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yc3, lpy-xc3, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yc2, lpy-xc2, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yc1, lpy-xc1, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : yc0, lpy-xc0, 0, 1, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : kory5, lpy-korx5, 0, 1, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : RAM5, lpy-h5, rRr1+OBV5, 2, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV5, lpy-h5, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV5-10, lpy-h5+10, 0, -10, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV5, lpy-h5, 0, 10, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV5, RAMY+OBV5, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV5-10, RAMY+OBV5-10, 0, -10, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV5, RAMY+OBV5, 0, 10, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV5+30, RAMY+OBV5, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV5+60, RAMY+OBV5, 0, -1, 0, 0, 0, 0, 0
+  @ ENDPATH, 0 :  
+
+@ ROUT, 0 : "144_1", 0, "1", 0, 0, "", 1, 18, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -1, 0, 5000, 18000, 0, 8000, "144", 103, 1, 0, 0, 90, 0, 0, 0, 0, 0, 0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 5, 0, 20, 80, 60, 0, "", "", "ROUT", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 0.1, 0, 0, 0, 1, 110
+  @ START_POINT, 0 : RAMY+OBV7, RAMY+OBV7, 0
+  @ LINE_EP, 0 : RAMY+OBV7-6, RAMY+OBV7-6, 1, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV7-6, -15, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV7+6, -15, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV7+6, RAMY+OBV7-6, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV7, RAMY+OBV7, 0, 0, 0, 0, 0, 0, 0
+  @ ENDPATH, 0 : 
+  
+@ ROUT, 0 : "144_1", 0, "1", 0, 0, "", 1, 18, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -1, 0, 5000, 18000, 0, 8000, "144", 103, 1, 0, 0, 90, 0, 0, 0, 0, 0, 0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 5, 0, 20, 80, 60, 0, "", "", "ROUT", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 0.1, 0, 0, 0, 1, 110
+  @ START_POINT, 0 : RAMY+OBV7, lpy-RAMX-OBV7, 0
+  @ LINE_EP, 0 : RAMY+OBV7-6, lpy-RAMX-OBV7+6, 1, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV7-6, lpy+15, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV7+6, lpy+15, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV7+6, lpy-RAMX-OBV7+6, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV7, lpy-RAMX-OBV7, 0, 0, 0, 0, 0, 0, 0
+  @ ENDPATH, 0 :  
+
+@ ROUT, 0 : "136_1", 0, "1", 0, 0, "", 1, 18, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -1, 0, 5000, 18000, 0, 8000, "136", 103, 1, 0, 0, 90, 0, 0, 0, 0, 0, 0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 5, 0, 20, 80, 60, 0, "", "", "ROUT", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 0.1, 0, 0, 0, 1, 110
+  @ START_POINT, 0 : RAMY+OBV2+10, RAMY+OBV2, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV2, RAMY+OBV2, 2, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY-OBV2, lpy-h2, 0, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : lpx-kory2, lpy-korx2, rRr1+OBV2, 2, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : kory2, lpy-korx2, rRr2-OBV2, 1, 0, 0, 0, 0, 0, 1
+  @ ARC_EPRA, 0 : RAMY+OBV2, lpy-h2, rRr1+OBV2, 2, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV2, RAMY+OBV2, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV2+30, RAMY+OBV2, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+OBV2+60, RAMY+OBV2, 0, -1, 0, 0, 0, 0, 0
+  @ ENDPATH, 0 :
+
+@ ROUT, 0 : "136_2", 0, "1", 0, 0, "", 1, 18, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -1, 0, 5000, 18000, 0, 8000, "136", 103, 1, 0, 0, 90, 0, 0, 0, 0, 0, 0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 5, 0, 20, 80, 60, 0, "", "", "ROUT", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 0.1, 0, 0, 0, 1, 110
+  @ START_POINT, 0 : RAMY+10, RAMY, 0
+  @ LINE_EP, 0 : lpx-RAMY, RAMY, 2, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMY, lpy-RAMX, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMK, lpy-RAMX, 0, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : lpx-RAMK-ty0, lpy-RAMX+tx0, rRr1, 2, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : RAMK+ty0, lpy-RAMX+tx0, rRr2, 1, 0, 0, 0, 0, 0, 1
+  @ ARC_EPRA, 0 : RAMK, lpy-RAMX, rRr1, 2, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY, lpy-RAMX, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY, RAMY, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+30, RAMY, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMY+60, RAMY, 0, -1, 0, 0, 0, 0, 0
+  @ ENDPATH, 0 :
+  
+@ ROUT, 0 : "136_3", 0, "1", 0, 0, "", 1, 18, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -1, 0, 5000, 18000, 0, 8000, "136", 103, 1, 0, 0, 90, 0, 0, 0, 0, 0, 0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 5, 0, 20, 80, 60, 0, "", "", "ROUT", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 0.1, 0, 0, 0, 1, 110
+  @ START_POINT, 0 : KANT+20, KANT, 0
+  @ LINE_EP, 0 : lpx-KANT, KANT, 1.5, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-KANT, lpy-KANT, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : KANT, lpy-KANT, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : KANT, KANT, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : KANT+30, KANT, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : KANT+50, KANT, 0, -1, 0, 0, 0, 0, 0
+  @ ENDPATH, 0 :  
+ 

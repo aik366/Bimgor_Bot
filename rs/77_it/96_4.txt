@@ -1,0 +1,10 @@
+  @ LINE_EP, 0 : f, lpy-f2y-g-g/4, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : f-d/2, lpy-f2y-g-g/4-d/2, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : f-d/2, lpy-f2y-g-g/4-d/2-g/2, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : f-d, lpy-f2y-g-g/4-d-g/2, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : f-d, lpy-f2y-d-g/2, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : f-d+d/2, lpy-f2y-d-g/2+d/2, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : f-d+d/2, lpy-f2y-d+d/2, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : f, lpy-f2y, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : f, lpy-f2y-g-g/4, 0, 0, 0, 0, 0, 0, 0
+'TTTT4

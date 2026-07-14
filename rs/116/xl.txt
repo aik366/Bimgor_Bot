@@ -1,0 +1,25 @@
+]2
+$E0
+KP 
+X=nach
+Y=-20
+Z=t
+KO=0
+
+$E1
+KL 
+X=@0
+Y=w+20
+
+<vib3
+
+<105 \Konturfraesen\
+EA="2:0"
+MDA="SEN"
+RK="NoWRK"
+EE="2:konec"
+MDE="SEN_AB"
+TNO="150"
+F_="8"
+ZA="t-2"
+MZF="1"

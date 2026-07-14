@@ -1,0 +1,6 @@
+  @ ARC_EPRA, 0 : f, lpy-f2y-g, g*3/4, 2, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : f-d/2, lpy-f2y-g-d/2, 0, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : f-d/2, lpy-f2y-d/2, g*3/4, 2, 0, 0, 0, 0, 0, 1
+  @ LINE_EP, 0 : f, lpy-f2y, 0, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : f, lpy-f2y-g, g*3/4, 2, 0, 0, 0, 0, 0, 0
+'TTTT4

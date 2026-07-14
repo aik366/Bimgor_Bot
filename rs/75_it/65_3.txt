@@ -1,0 +1,6 @@
+  @ ARC_EPRA, 0 : lpx-f, fy+g, g*3/4, 2, 0, 0, 0, 0, 0, 1
+  @ LINE_EP, 0 : lpx-f+d/2, fy+g+d/2, 0, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : lpx-f+d/2, fy+d/2, g*3/4, 2, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-f, fy, 0, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : lpx-f, fy+g, g*3/4, 2, 0, 0, 0, 0, 0, 1
+'TTTT3

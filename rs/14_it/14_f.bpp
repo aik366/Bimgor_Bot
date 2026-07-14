@@ -1,0 +1,77 @@
+[HEADER]
+TYPE=BPP
+VER=150
+
+[DESCRIPTION]
+|
+
+[VARIABLES]
+PAN=LPX|600||4|
+PAN=LPY|400||4|
+PAN=LPZ|16.2||4|
+PAN=ORLST|"5"||3|
+PAN=SIMMETRY|1||1|
+PAN=TLCHK|0||1|
+PAN=TOOLING|""||3|
+PAN=CUSTSTR|$B$KBsExportToNcRoverNET.XncExtraPanelData$V""||3|
+PAN=FCN|1.000000||2|
+PAN=XCUT|0||4|
+PAN=YCUT|0||4|
+PAN=JIGTH|0||4|
+PAN=CKOP|0||1|
+PAN=UNIQUE|0||1|
+PAN=MATERIAL|"wood"||3|
+PAN=PUTLST|""||3|
+PAN=OPPWKRS|0||1|
+PAN=UNICLAMP|0||1|
+PAN=CHKCOLL|0||1|
+PAN=WTPIANI|0||1|
+PAN=COLLTOOL|0||1|
+PAN=CALCEDTH|0||1|
+PAN=ENABLELABEL|0||1|
+PAN=LOCKWASTE|0||1|
+PAN=LOADEDGEOPT|0||1|
+PAN=ITLTYPE|0||1|
+PAN=RUNPAV|0||1|
+PAN=FLIPEND|0||1|
+PAN=ENABLEMACHLINKS|0||1|
+PAN=ENABLEPURSUITS|0||1|
+PAN=ENABLEFASTVERTBORINGS|0||1|
+PAN=FASTVERTBORINGSVALUE|0||4|
+LOC=RKRAY|5||0|
+LOC=RAMX|120||0|
+LOC=RAMY|70||0|
+LOC=ty1|(LPY - 2 * RAMY) / 4||0|
+LOC=tx1|(RAMX - RAMY) / 2||0|
+LOC=rRr|(tx1 * tx1 + ty1 * ty1) / (2 * tx1)||0|
+
+[PROGRAM]
+@ OFFSET, 0 : 1.5, -1.5, 0, 0
+    
+@ ROUT, 0 : "129", 0, "1", 0, 0, "", 1, 18, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -1, 0, 5000, 18000, 0, 8000, "129", 103, 1, 0, 0, 90, 0, 0, 0, 0, 0, 0, 90, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 5, 0, 20, 80, 60, 0, "", "", "ROUT", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 0.1, 0, 0, 0, 1, 110
+  @ START_POINT, 0 : RAMX+10, RAMY, 0
+  @ LINE_EP, 0 : RAMX+110, RAMY, 0, 9, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : lpx-RAMX, RAMY, 0, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : lpx-RAMX+tx1, RAMY+ty1, rRr, 2, 0, 0, 0, 0, 0, 1
+  @ ARC_EPRA, 0 : lpx-RAMX+tx1, lpy-RAMY-ty1, rRr, 1, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : lpx-RAMX, lpy-RAMY, rRr, 2, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMX, lpy-RAMY, 0, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : RAMX-tx1, lpy-RAMY-ty1, rRr, 2, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : RAMX-tx1, RAMY+ty1, rRr, 1, 0, 0, 0, 0, 0, 1
+  @ ARC_EPRA, 0 : RAMX, RAMY, rRr, 2, 0, 0, 0, 0, 0, 1
+  @ LINE_EP, 0 : RAMX+120, RAMY, 0, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : RAMX+150, RAMY, 0, -1, 0, 0, 0, 0, 0
+  @ ENDPATH, 0 :
+  
+@ ROUT, 0 : "158", 0, "1", 0, 16.3, "", 1, 18, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 18000, 3000, 8000, "158", 103, 1, 1, 1, 90, 1, 0, 0, 0, 0, 1, 90, 1, 0, 0, 0, 0, 0, 0, 0, 100, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 5, 0, 20, 80, 60, 0, "", "", "ROUT", 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2000, 0, 0.1, 0, 0, 0, 99, 0
+  @ START_POINT, 0 : LPX/2, 0, 0
+  @ LINE_EP, 0 : LPX-RKRAY, 0, 0, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : LPX, RKRAY, RKRAY, 1, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : LPX, LPY-RKRAY, 0, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : LPX-RKRAY, LPY, RKRAY, 1, 0, 0, 0, 0, 0, 1
+  @ LINE_EP, 0 : RKRAY, LPY, 0, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : 0, LPY-RKRAY, RKRAY, 1, 0, 0, 0, 0, 0, 1
+  @ LINE_EP, 0 : 0, RKRAY, 0, 0, 0, 0, 0, 0, 0
+  @ ARC_EPRA, 0 : RKRAY, 0, RKRAY, 1, 0, 0, 0, 0, 0, 0
+  @ LINE_EP, 0 : LPX/2, 0, 0, 0, 0, 0, 0, 0, 0
+  @ ENDPATH, 0 :

@@ -1,0 +1,25 @@
+]2
+<vib1
+
+<105 \Konturfraesen\
+EA="2:0"
+MDA="SEN"
+RK="NoWRK"
+EE="2:konec"
+MDE="SEN_AB"
+TNO="157"
+F_="8"
+ZA="t-2"
+
+]3
+<vib2
+
+<105 \Konturfraesen\
+EA="3:0"
+MDA="SEN"
+RK="NoWRK"
+EE="3:1"
+MDE="SEN_AB"
+TNO="157"
+F_="8"
+ZA="t-2"

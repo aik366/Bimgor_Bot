@@ -1,0 +1,13 @@
+[K
+<00 \Koordinatensystem\
+NR="04"
+XP="XKORD"
+XF="1.0"
+YP="0.0"
+YF="1.0"
+ZP="0.0"
+ZF="1.0"
+D1="90"
+KI="0.0"
+D2="0.0"
+MI="0"
