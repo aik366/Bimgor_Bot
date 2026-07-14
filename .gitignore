@@ -9,6 +9,11 @@ env/
 .env
 config.py
 
+nc/
+ss/
+it/
+DATA/temp.txt
+
 .idea/
 .vscode/
 

@@ -71,11 +71,11 @@ async def cmd_fail_skrin(message: Message):
 @router.callback_query(F.data == "papki_value")
 async def send_papki_value(call: CallbackQuery):
     ss, nc, it = 'ss станок: ', 'nc станок: ', 'it станок: '
-    for i in os.listdir('.\ss'):
+    for i in os.listdir('.\\ss'):
         ss += i[:4] + '|'
     for i in os.listdir('.\\nc'):
         nc += i[:4] + '|'
-    for i in os.listdir('.\it'):
+    for i in os.listdir('.\\it'):
         it += i[:4] + '|'
     await call.message.answer(f'{ss}\n{nc}\n{it}')
     await call.message.answer('zak_az: {}'.format('|'.join(zak_az)))
@@ -98,7 +98,7 @@ async def send_del_value(call: CallbackQuery):
 async def send_copyit_value_tt(call: CallbackQuery):
     g = ''
     if os.path.exists(put_555it):
-        for i in os.listdir('.\it'):
+        for i in os.listdir('.\\it'):
             copy_directory('it/' + i, put_555it + "/" + i)
             g += i[:4] + '|'
         await call.message.answer('{} \nкопирования it станка завершен'.format(g))
@@ -123,7 +123,7 @@ async def send_copync_value_ss(call: CallbackQuery):
 @router.callback_query(F.data == "copyss_value_ss")
 async def send_copyss_value_nc(call: CallbackQuery):
     if os.path.exists(put_555ss):
-        for i in os.listdir('.\ss'):
+        for i in os.listdir('.\\ss'):
             copy_directory('ss/' + i, put_555ss + "/" + i)
             if i[:4] not in zak_az:
                 zak_az.append(i[:4])
