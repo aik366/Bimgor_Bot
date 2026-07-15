@@ -11,11 +11,11 @@ os.environ["GRPC_DEFAULT_SSL_ROOTS_FILE_PATH"] = certifi.where()
 os.environ["SSL_TBANK_VERIFY"] = "true"
 from datetime import datetime, timezone
 from decimal import Decimal
-import json
-import urllib.request
 
+from t_tech.invest import Client
 from t_tech.invest.schemas import (
     GetOperationsByCursorRequest,
+    InstrumentIdType,
     OperationState,
     OperationType,
 )
@@ -44,21 +44,6 @@ def load_token() -> str:
     except FileNotFoundError:
         pass
     return os.environ.get("INVEST_TOKEN", "")
-
-
-def fetch_moex_index(index_ticker: str = "IMOEX") -> tuple[float, float] | None:
-    url = f"https://iss.moex.com/iss/engines/stock/markets/index/securities/{index_ticker}.json"
-    try:
-        with urllib.request.urlopen(url, timeout=5) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-        md = data.get("marketdata", {})
-        cols = md.get("columns", [])
-        rows = md.get("data", [])
-        if rows:
-            row = rows[0]
-            return row[cols.index("CURRENTVALUE")], row[cols.index("LASTCHANGEPRC")]
-    except Exception:
-        return None
 
 
 def main() -> None:
@@ -145,6 +130,7 @@ def main() -> None:
                 ticker_to_div[ticker] = ticker_to_div.get(ticker, Decimal("0")) + amount
 
         DIV_TAX = Decimal("0.87")
+        BOT_TEXT = ""
 
         # ── Per-account tables ──
         total_value = Decimal("0")
@@ -158,8 +144,7 @@ def main() -> None:
             summary = client.portfolio_summary(acc.id)
             portfolio = client.get_portfolio(acc.id)
 
-            print(
-                f"  {'Тикер':<10} {'Кол-во':<10} {'Средняя':<12} {'Текущая':<14} {'Дивиденды':<12} {'Доход':<12} {'За день':<12}")
+            print(f"  {'Тикер':<10} {'Кол-во':<10} {'Средняя':<12} {'Текущая':<14} {'Дивиденды':<12} {'Доход':<12} {'За день':<12}")
             for pos in portfolio.positions:
                 if pos.ticker.startswith("RUB"):
                     continue
@@ -168,8 +153,7 @@ def main() -> None:
                 div_gross = div_by_acc_figi.get((acc.id, pos.figi), Decimal("0"))
                 div_net = div_gross * DIV_TAX
                 adj_yield = yield_val + div_net
-                print(
-                    f"  {pos.ticker:<10} {pos.quantity:<10.2f} {pos.average_price:<12.2f} {pos.current_price:<14.2f} {_cval(div_net, 12)} {_cval(adj_yield, 12)} {_cval(daily_yield, 12)}")
+                print(f"  {pos.ticker:<10} {pos.quantity:<10.2f} {pos.average_price:<12.2f} {pos.current_price:<14.2f} {_cval(div_net, 12)} {_cval(adj_yield, 12)} {_cval(daily_yield, 12)}")
                 total_yield += yield_val
 
             print(f"  Стоимость: {summary.total_value:,.2f} руб")
@@ -204,38 +188,43 @@ def main() -> None:
                 agg["total_daily_yield"] += pos.daily_yield
 
         print("\nМой капитал")
-        print(
-            f"  {'Тикер':<10} {'Кол-во':<10} {'Средняя':<12} {'Текущая':<14} {'Дивиденды':<12} {'Доход':<12} {'За день':<12}")
+        print(f"  {'Тикер':<10} {'Кол-во':<10} {'Средняя':<12} {'Текущая':<14} {'Дивиденды':<12} {'Доход':<12} {'За день':<12}")
         for ticker, agg in aggregated.items():
             avg_price = agg["total_cost"] / agg["quantity"] if agg["quantity"] else Decimal("0")
             div_gross = ticker_to_div.get(ticker, Decimal("0"))
             div_net = div_gross * DIV_TAX
             adj_yield = agg["total_yield"] + div_net
-            print(
-                f"  {ticker:<10} {agg['quantity']:<10.2f} {avg_price:<12.2f} {agg['current_price']:<14.2f} {_cval(div_net, 12)} {_cval(adj_yield, 12)} {_cval(agg['total_daily_yield'], 12)}")
+            BOT_TEXT += f"{ticker} {agg['quantity']} {avg_price:,.2f} _{agg['current_price']:,.2f}_\n{div_net:,.2f} {adj_yield:,.2f} _{agg['total_daily_yield']:,.2f}_\n\n"
             total_agg_value += agg["current_price"] * agg["quantity"]
 
         print(f"  Стоимость: {total_agg_value:,.2f} руб")
 
         dividend_tax = total_div_gross * DIV_TAX
-        print(f"\n  Суммарная стоимость: {total_value:,.2f} руб")
+        BOT_TEXT += f"Стоимость: {total_value:,.2f} руб\n"
         coupon_tax = total_coupon_gross * DIV_TAX
         total_yield += dividend_tax + total_coupon_gross + total_sale_profit - total_commission
-        print(f"  Суммарный доход:    {_cval(total_yield, comma=True)} руб")
-        print(f"  Доход за день:      {_cval(total_daily_yield, comma=True)} руб")
+        BOT_TEXT += f"Доход: {total_yield:,.2f} руб\n"
+        BOT_TEXT += f"За день: {total_daily_yield:,.2f} руб\n"
 
-        print(f"  Дивиденды получено: {_cval(dividend_tax, comma=True)} руб")
-        print(f"  Купонов получено:   {_cval(total_coupon_gross, comma=True)} руб")
-        print(f"  Прибыль от продаж:  {_cval(total_sale_profit, comma=True)} руб")
-        print(f"  Уплачено комиссий:  {_cval(total_commission, comma=True)} руб")
-        print(f"  Пополнения:         {_cval(total_deposits, comma=True)} руб")
+        BOT_TEXT += f"Дивиденды: {dividend_tax:,.2f} руб\n"
+        BOT_TEXT += f"Купоны: {total_coupon_gross:,.2f} руб\n"
+        BOT_TEXT += f"Прибыль: {total_sale_profit:,.2f} руб\n"
+        BOT_TEXT += f"Комиссия: {total_commission:,.2f} руб\n"
+        BOT_TEXT += f"Пополнения: {total_deposits:,.2f} руб\n"
 
-        index_data = fetch_moex_index()
-        if index_data:
-            value, change_pct = index_data
+        with Client(token) as moex_client:
+            response = moex_client.instruments.get_instrument_by(
+                id_type=InstrumentIdType.INSTRUMENT_ID_TYPE_TICKER,
+                id="IMOEXF",
+                class_code="SPBFUT",
+            )
+            instrument = response.instrument
+            ob = moex_client.market_data.get_order_book(figi=instrument.figi, depth=1)
+            value = ob.last_price.units + ob.last_price.nano / 1_000_000_000
+            close = ob.close_price.units + ob.close_price.nano / 1_000_000_000
+            change_pct = (value - close) / close * 100 if close else 0
             color = GREEN if change_pct >= 0 else RED
-            print(f"  Индекс МосБиржи:    {color}{int(value)} ({change_pct:+.2f}%){RESET}")
-
-
+            BOT_TEXT += f"IMOEXF: {int(value)} ({change_pct:+.2f}%)\n"
+        return BOT_TEXT
 if __name__ == "__main__":
     main()

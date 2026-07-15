@@ -12,6 +12,7 @@ from aiogram.fsm.context import FSMContext
 
 from app import keyboards as kb
 from app import database as db
+from app import run_invest
 from config import id_klient
 # from fas import *
 from app.smart_lab import *
@@ -257,7 +258,7 @@ async def cmd_actions_bot(message: Message, state: FSMContext):
 
 @router.callback_query(F.data == "view_actions")
 async def view_actions(call: CallbackQuery):
-    await call.message.answer(f"{await viev_ticers()}")
+    await call.message.answer(f"{run_invest.main()}", parse_mode="Markdown")
     await call.answer()
 
 
