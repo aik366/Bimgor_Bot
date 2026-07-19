@@ -46,6 +46,34 @@ def load_token() -> str:
     return os.environ.get("INVEST_TOKEN", "")
 
 
+def _get_price_change(client, ticker: str, class_code: str = "") -> tuple[float | None, float | None]:
+    try:
+        response = client.instruments.get_instrument_by(
+            id_type=InstrumentIdType.INSTRUMENT_ID_TYPE_TICKER,
+            id=ticker,
+            class_code=class_code,
+        )
+    except Exception:
+        return None, None
+    instrument = response.instrument
+    if instrument is None:
+        return None, None
+    ob = client.market_data.get_order_book(figi=instrument.figi, depth=1)
+    value = ob.last_price.units + ob.last_price.nano / 1_000_000_000
+    close = ob.close_price.units + ob.close_price.nano / 1_000_000_000
+    change_pct = (value - close) / close * 100 if close else 0
+    return value, change_pct
+
+
+def print_market_price(client, ticker: str, class_code: str = "", fmt_int: bool = False, label: str = "") -> None:
+    value, change_pct = _get_price_change(client, ticker, class_code)
+    if value is None:
+        return f"{label or ticker} не найден"
+
+    val_str = f"{int(value)}" if fmt_int else f"{value:.2f}"
+    return f"{label or ticker} {val_str} ({change_pct:+.2f}%)\n"
+    
+
 def main() -> None:
     token = load_token()
     if not token:
@@ -188,13 +216,25 @@ def main() -> None:
                 agg["total_daily_yield"] += pos.daily_yield
 
         print("\nМой капитал")
+        live_prices: dict[str, tuple[float, float] | None] = {}
+        with Client(token) as mc:
+            for ticker in aggregated:
+                res = _get_price_change(mc, ticker)
+                if res[0] is None:
+                    res = _get_price_change(mc, ticker, "TQBR")
+                live_prices[ticker] = res
+
         print(f"  {'Тикер':<10} {'Кол-во':<10} {'Средняя':<12} {'Текущая':<14} {'Дивиденды':<12} {'Доход':<12} {'За день':<12}")
         for ticker, agg in aggregated.items():
             avg_price = agg["total_cost"] / agg["quantity"] if agg["quantity"] else Decimal("0")
             div_gross = ticker_to_div.get(ticker, Decimal("0"))
             div_net = div_gross * DIV_TAX
             adj_yield = agg["total_yield"] + div_net
-            BOT_TEXT += f"{ticker} {agg['quantity']} {avg_price:,.2f} _{agg['current_price']:,.2f}_\n{div_net:,.2f} {adj_yield:,.2f} _{agg['total_daily_yield']:,.2f}_\n\n"
+            live = live_prices.get(ticker)
+            price = live[0] if live and live[0] is not None else float(agg['current_price'])
+            pct = live[1] if live and live[1] is not None else None
+            pct_str = f"({pct:+.2f}%)" if pct is not None else ""
+            BOT_TEXT += f"{ticker}\n{agg['quantity']}|{avg_price:,.2f}|_{price:,.2f}_|{pct_str}\n{div_net:,.2f}|{adj_yield:,.2f}|_{agg['total_daily_yield']:,.2f}_\n\n"
             total_agg_value += agg["current_price"] * agg["quantity"]
 
         print(f"  Стоимость: {total_agg_value:,.2f} руб")
@@ -210,21 +250,14 @@ def main() -> None:
         BOT_TEXT += f"Купоны: {total_coupon_gross:,.2f} руб\n"
         BOT_TEXT += f"Прибыль: {total_sale_profit:,.2f} руб\n"
         BOT_TEXT += f"Комиссия: {total_commission:,.2f} руб\n"
-        BOT_TEXT += f"Пополнения: {total_deposits:,.2f} руб\n"
-
+        BOT_TEXT += f"Пополнения: {total_deposits:,.2f} руб\n\n"
+        
         with Client(token) as moex_client:
-            response = moex_client.instruments.get_instrument_by(
-                id_type=InstrumentIdType.INSTRUMENT_ID_TYPE_TICKER,
-                id="IMOEXF",
-                class_code="SPBFUT",
-            )
-            instrument = response.instrument
-            ob = moex_client.market_data.get_order_book(figi=instrument.figi, depth=1)
-            value = ob.last_price.units + ob.last_price.nano / 1_000_000_000
-            close = ob.close_price.units + ob.close_price.nano / 1_000_000_000
-            change_pct = (value - close) / close * 100 if close else 0
-            color = GREEN if change_pct >= 0 else RED
-            BOT_TEXT += f"IMOEXF: {int(value)} ({change_pct:+.2f}%)\n"
+            BOT_TEXT += print_market_price(moex_client, "IMOEXF", "SPBFUT", fmt_int=True, label="Индекс МосБиржи")
+            BOT_TEXT += print_market_price(moex_client, "SBERP", "TQBR")
+            BOT_TEXT += print_market_price(moex_client, "TRNFP", "TQBR")
+            BOT_TEXT += print_market_price(moex_client, "X5", "TQBR")
+
         return BOT_TEXT
 if __name__ == "__main__":
     main()
