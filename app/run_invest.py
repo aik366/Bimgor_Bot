@@ -253,10 +253,11 @@ def main() -> None:
         BOT_TEXT += f"Пополнения: {total_deposits:,.2f} руб\n\n"
         
         with Client(token) as moex_client:
-            BOT_TEXT += print_market_price(moex_client, "IMOEXF", "SPBFUT", fmt_int=True, label="Индекс МосБиржи")
+            BOT_TEXT += print_market_price(moex_client, "IMOEXF", "SPBFUT", fmt_int=True, label="МосБиржа")
             BOT_TEXT += print_market_price(moex_client, "SBERP", "TQBR")
             BOT_TEXT += print_market_price(moex_client, "TRNFP", "TQBR")
             BOT_TEXT += print_market_price(moex_client, "X5", "TQBR")
+            BOT_TEXT += print_market_price(moex_client, "MOEX", "TQBR")
 
         return BOT_TEXT
 if __name__ == "__main__":
