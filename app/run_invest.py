@@ -225,6 +225,7 @@ def main() -> None:
                 live_prices[ticker] = res
 
         print(f"  {'Тикер':<10} {'Кол-во':<10} {'Средняя':<12} {'Текущая':<14} {'Дивиденды':<12} {'Доход':<12} {'За день':<12}")
+        list_ticker = []
         for ticker, agg in aggregated.items():
             avg_price = agg["total_cost"] / agg["quantity"] if agg["quantity"] else Decimal("0")
             div_gross = ticker_to_div.get(ticker, Decimal("0"))
@@ -236,6 +237,7 @@ def main() -> None:
             pct_str = f"({pct:+.2f}%)" if pct is not None else ""
             BOT_TEXT += f"{ticker}\n{agg['quantity']}|{avg_price:,.2f}|_{price:,.2f}_|{pct_str}\n{div_net:,.2f}|{adj_yield:,.2f}|_{agg['total_daily_yield']:,.2f}_\n\n"
             total_agg_value += agg["current_price"] * agg["quantity"]
+            list_ticker.append(ticker)
 
         print(f"  Стоимость: {total_agg_value:,.2f} руб")
 
@@ -254,10 +256,8 @@ def main() -> None:
         
         with Client(token) as moex_client:
             BOT_TEXT += print_market_price(moex_client, "IMOEXF", "SPBFUT", fmt_int=True, label="МосБиржа")
-            BOT_TEXT += print_market_price(moex_client, "SBERP", "TQBR")
-            BOT_TEXT += print_market_price(moex_client, "TRNFP", "TQBR")
-            BOT_TEXT += print_market_price(moex_client, "X5", "TQBR")
-            BOT_TEXT += print_market_price(moex_client, "MOEX", "TQBR")
+            for ticker in list_ticker:
+                BOT_TEXT += print_market_price(moex_client, ticker, "TQBR")
 
         return BOT_TEXT
 if __name__ == "__main__":
